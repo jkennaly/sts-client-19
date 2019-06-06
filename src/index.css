@@ -1,0 +1,72 @@
+/* index.css */
+
+@import url('https://fonts.googleapis.com/css?family=Rubik');
+@charset "UTF-8";
+
+body {background: radial-gradient(black, #003300);height: 100%;margin: 0;padding: 0;width: 100%;}
+html {height: 100%;margin: 0;padding: 0;width: 100%;}
+input { font-family: 'FontAwesome'; }
+td {padding: 0.2em 0;text-align: center;}
+th {border-left: 1px solid white;border-right: 1px solid white;padding: 0 0.25em;}
+#app {color: white;display: flex;flex-direction: column;font-family: 'Rubik', sans-serif;height: 100%; width: 100%;}
+#DisplayBar {bottom: 0;position: fixed;width: 100%;}
+#main-stage {display: flex;flex-direction: column;height: 100%;overflow-y: hidden;padding: 5px 5px 5px 5px;width: 100%;}
+#upgrade-notice {background-color: #4B0082;font-size: 40px;font-variant: small-caps;left: 50%;position: fixed;top: 0;transform: translateX(-50%);z-index: 10;}
+.app-description {color: white;padding: 1em 0;}
+.app-title, .app-greeting {color: white;}
+.App {display: flex;flex-direction: column;height: 100%; width: 100%;}
+.banner-button {display: flex;flex-direction: row;justify-content: flex-end;text-align: right;}
+.banner-button svg {position: relative;}
+.banner-menu {bottom: 0;display: inline-block;position: absolute;right: 0;z-index: 10;}
+.banner-menu-content {background-color: #f1f1f1;box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);display: flex;flex-direction: column;opacity: 1.0;position: absolute;right: 0;top: 0.5em;}
+.hidden { display:none; }
+.launcher-container {flex-direction: column;padding: 85px 5px 5px 5px;}
+.login-button {color: white;display: flex;flex: 1;flex-direction: column;justify-content: center;}
+.ui-button {align-self: center;background: radial-gradient(#EE5F28, black);color: cyan;display: flex;justify-content: center;left: 0;margin: 1em 0;padding: 1em;right: 0;width: 50%;}
+
+.frame-game {
+  border: 1px solid silver;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.frame-self {
+  background: #838383;
+  color: white;
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 150px;
+  padding: 10px;
+  white-space: nowrap;
+}
+.frame-active {
+  background: #838383;
+  color: white;
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 150px;
+  padding: 10px;
+  white-space: nowrap;
+}
+.frame-sense {
+  background: #838383;
+  color: white;
+  display: flex;
+  flex: 1 0 auto;
+  min-width: 150px;
+  padding: 10px;
+  white-space: nowrap;
+}
+.frame-main {
+  align-items: stretch;
+  background: #eee;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 200px;
+  padding: 10px;
+  width: 100%;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "STS-OOI",
+  "shortName": "sts",
+  "description": "Yeah science, bitch",
+  "dir": "auto",
+  "lang": "en-US",
+  "display": "standalone",
+  "orientation": "any",
+  "startUrl": "/",
+  "backgroundColor": "#003300",
+  "themeColor": "#003300",
+  "icons": [],
+  "preferRelatedApplications": false,
+  "relatedApplications": [],
+  "scope": "/"
+}
