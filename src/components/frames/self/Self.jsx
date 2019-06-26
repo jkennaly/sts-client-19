@@ -9,11 +9,17 @@ import Player from '../../../store/entity/player/Player.js'
 
 
 const Self = (vnode) => {
-	var self = {}
+	var self = new Player()
 	return {
-		//onupdate: () => console.log('Self update'),
-	view: () => <div class="frame-self">
-		<h1>Self</h1>
+		view: () => <div class="frame-self">
+			<h1>Self</h1>
+			<embed 
+				name={"self-layout" }
+				id={"self-layout" }
+				src={"img/GoldTypographyQuestion.svg"}
+				width={"100%"}
+				/>
+
 
 	</div>
 }}

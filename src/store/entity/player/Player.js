@@ -5,7 +5,8 @@
 import m from 'mithril'
 import _ from 'lodash'
 import localforage from 'localforage'
-const uuidv4 = require('uuid/v4');
+
+import Entity from '../Entity.js'
 
 //a player can be:
 	//created from an existing Object
@@ -13,8 +14,11 @@ const uuidv4 = require('uuid/v4');
 
 
 function Player (id) {
-
+	Entity.call(this, id, {playable: true})
 
 }
+
+Player.prototype = Object.create(Entity.prototype)
+
 
 export default Player;
