@@ -8,13 +8,17 @@ import _ from 'lodash'
 import Button from  '../elements/Button.jsx'
 
 const newGame = e => m.route.set('/game')
+const settings = e => m.route.set('/settings')
 
 const Launcher = (vnode) => {
+	
 	return {
+		//oncreate: console.log('Launched'),
 		//onupdate: () => console.log('Launcher update'),
-	view: () => <div class="main-stage">
-		<Button buttonName={`New Game`} action={newGame} />
+		view: () => <div class="main-stage">
+			<Button buttonName={`New Game`} action={newGame} />
+			<Button buttonName={`Settings`} action={settings} />
 
-	</div>
+		</div>
 }}
 export default Launcher;

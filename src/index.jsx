@@ -9,6 +9,7 @@ import "./index.css";
 //import "./favicon.ico";
 
 import App from './components/layout/App.jsx';
+//console.log('index.jsx')
 //window.isUpdateAvailable = new Promise(function(resolve, reject) {
 if ('serviceWorker' in navigator) {
   /*

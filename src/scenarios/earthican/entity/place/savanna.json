@@ -1,0 +1,12 @@
+{
+	"value": "Savanna",
+	"type": "ShortText",
+	"tag": "Savanna Place Entity",
+	"name": "savanna",
+	"scales": [5, 6, 7],
+	"senses": [],
+	"profiles": [],
+	"defaultSubBiome": "grass",
+	"defaultSubHole": "air",
+	"biome": "grass"
+}

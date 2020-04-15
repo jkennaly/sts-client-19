@@ -27,7 +27,7 @@ if (workbox) {
 	  maxRetentionTime: 24 * 60 * 7 // Retry for max of 1 week
 	})
 
-	  workbox.precaching.precacheAndRoute([])
+	  workbox.precaching.precacheAndRoute(self.__WB_MANIFEST)
 
 
 
