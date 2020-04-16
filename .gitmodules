@@ -1,3 +1,6 @@
 [submodule "voxeljs-next"]
 	path = voxeljs-next
 	url = https://github.com/joshmarinacci/voxeljs-next.git
+[submodule "vendor/voxeljs-next"]
+	path = vendor/voxeljs-next
+	url = https://github.com/joshmarinacci/voxeljs-next.git

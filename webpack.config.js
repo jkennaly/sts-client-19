@@ -13,6 +13,9 @@ module.exports = {
 	devServer: {
 		contentBase: "./dist"
 	},
+	stats: {
+		errorDetails: true
+	},
 	plugins: [
 		new CleanWebpackPlugin(["dist"]),
 		new HtmlWebpackPlugin({

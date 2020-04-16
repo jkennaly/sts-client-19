@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const webpack = require("webpack");
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
       new OptimizeCSSAssetsPlugin({})
     ]
   },
-	plugins: [
+	plugins: [,
 		new CleanWebpackPlugin(["dist"]),
 		new HtmlWebpackPlugin({
 			template: "./index.html",

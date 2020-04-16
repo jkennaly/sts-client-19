@@ -1,0 +1,59 @@
+
+> sts-ooi@1.0.0 build /home/jbk/projects/sts/sts-client-19
+> webpack --config webpack.config.js
+
+Hash: 769a345cef462be05e05
+Version: webpack 4.33.0
+Time: 4196ms
+Built at: 04/15/2020 3:19:46 AM
+      Asset       Size  Chunks             Chunk Names
+  bundle.js   16.4 MiB    main  [emitted]  main
+favicon.ico     15 KiB          [emitted]  
+ index.html  756 bytes          [emitted]  
+Entrypoint main = bundle.js
+[./node_modules/css-loader/dist/cjs.js!./src/index.css] 4.23 KiB {main} [built]
+[./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 472 bytes {main} [built]
+[./src/index.css] 1.06 KiB {main} [built]
+[./src/index.jsx] 1.73 KiB {main} [built]
+[./src/scenarios/earthican/scenario.js] 1.43 KiB {main} [built]
+[./src/services/engine/engine.js] 1.43 KiB {main} [built]
+[./src/services/engine/evalTick.js] 2.93 KiB {main} [built]
+[./src/services/focus.js] 862 bytes {main} [built]
+[./src/services/forces.js] 133 bytes {main} [built]
+[./src/services/settings.js] 792 bytes {main} [built]
+[./src/services/vm/places.js] 1.93 KiB {main} [built]
+[./src/services/vm/players.js] 307 bytes {main} [built]
+[./src/store/entity/diffuse/Game.js] 735 bytes {main} [built]
+[./src/store/entity/discrete/Divine.js] 1.44 KiB {main} [built]
+[./src/store/entity/place/Place.js] 1.39 KiB {main} [built]
+    + 447 hidden modules
+Child html-webpack-plugin for "index.html":
+     1 asset
+    Entrypoint undefined = index.html
+    [./node_modules/html-webpack-plugin/lib/loader.js!./index.html] 869 bytes {0} [built]
+    [./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 472 bytes {0} [built]
+    [./node_modules/webpack/buildin/module.js] (webpack)/buildin/module.js 497 bytes {0} [built]
+        + 1 hidden module
+
+> sts-ooi@1.0.0 postbuild /home/jbk/projects/sts/sts-client-19
+> npm run worker && npm run cp-man && npm run mk-img && npm run cp-img
+
+
+> sts-ooi@1.0.0 worker /home/jbk/projects/sts/sts-client-19
+> workbox injectManifest workbox-config.js
+
+Using configuration from /home/jbk/projects/sts/sts-client-19/workbox-config.js.
+The service worker file was written to dist/service-worker.js
+The service worker will precache 2 URLs, totaling 16.2 kB.
+
+> sts-ooi@1.0.0 cp-man /home/jbk/projects/sts/sts-client-19
+> cp src/manifest.webmanifest dist/
+
+
+> sts-ooi@1.0.0 mk-img /home/jbk/projects/sts/sts-client-19
+> mkdir dist/img
+
+
+> sts-ooi@1.0.0 cp-img /home/jbk/projects/sts/sts-client-19
+> cp src/img/* dist/img/
+
