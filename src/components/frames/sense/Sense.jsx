@@ -7,7 +7,7 @@ import _ from 'lodash'
 
 import SenseBar from './SenseBar.jsx'
 import List from './matrix/List.jsx'
-import Voxel from './matrix/Voxel.jsx'
+import Voxel from './matrix/ThirdPerson.jsx'
 
 
 const clickedD = cards => clickedId => _.forEach(cards, card => (card.id === clickedId && !card.focus.value) && card.focus.set() || (card.id === clickedId && card.focus.value) && card.focus.clear() || true)
