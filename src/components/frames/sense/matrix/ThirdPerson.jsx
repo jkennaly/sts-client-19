@@ -5,7 +5,7 @@ import m from 'mithril'
 import _ from 'lodash'
 
 
-import Game from '../../../../vendor/create-a-3d-rpg-game-with-threejs/losttreasure/v4/game'
+import Game from '../../../../../vendor/create-a-3d-rpg-game-with-threejs/original/losttreasure/v4/game'
 
 
 const ThirdPerson = {

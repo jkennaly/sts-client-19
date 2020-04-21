@@ -1,6 +1,6 @@
 import Detector from '../../libs/Detector'
-import THREE from 'three'
-import FBXLoader from 'three-fbx-loader'
+import * as THREE from 'three'
+import FBXLoader from 'three-fbxloader-offical'
 
 export default class Game{
 	constructor(container){
@@ -46,28 +46,31 @@ export default class Game{
 			//const levelIndex = Number(localStorage.getItem('levelIndex'));
 			//if (levelIndex!=undefined) this.levelIndex = levelIndex;
 		}
-		
-		this.container = container ? container : document.createElement( 'div' );
-		this.container.style.height = '100%';
-		document.body.appendChild( this.container );
+		if(container) {
+			this.container = container
+		} else {
+			this.container = document.createElement( 'div' )
+			this.container.style.height = '100%'
+			document.body.appendChild( this.container )
+		}
 		
 		const sfxExt = SFX.supportsAudioType('mp3') ? 'mp3' : 'ogg';
 		const game = this;
 		this.anims = ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"];
 		this.tweens = [];
 		
-		this.assetsPath = '../assets/';
+		this.assetsPath = 'assets/';
 		
 		const options = {
 			assets:[
-                `${this.assetsPath}sfx/gliss.${sfxExt}`,
-				`${this.assetsPath}sfx/factory.${sfxExt}`,
-				`${this.assetsPath}sfx/button.${sfxExt}`,
-				`${this.assetsPath}sfx/door.${sfxExt}`,
-                `${this.assetsPath}sfx/fan.${sfxExt}`,
-				`${this.assetsPath}fbx/environment.fbx`,
-				`${this.assetsPath}fbx/girl-walk.fbx`,
-                `${this.assetsPath}fbx/usb.fbx`,
+                `${this.assetsPath}gliss.${sfxExt}`,
+				`${this.assetsPath}factory.${sfxExt}`,
+				`${this.assetsPath}button.${sfxExt}`,
+				`${this.assetsPath}door.${sfxExt}`,
+                `${this.assetsPath}fan.${sfxExt}`,
+				`${this.assetsPath}environment.fbx`,
+				`${this.assetsPath}girl-walk.fbx`,
+                `${this.assetsPath}usb.fbx`,
 			],
 			oncomplete: function(){
 				game.init();
@@ -75,7 +78,7 @@ export default class Game{
 			}
 		}
 		
-		this.anims.forEach( function(anim){ options.assets.push(`${game.assetsPath}fbx/${anim}.fbx`)});
+		this.anims.forEach( function(anim){ options.assets.push(`${game.assetsPath}${anim}.fbx`)});
 		
 		this.mode = this.modes.PRELOAD;
 		
@@ -193,7 +196,7 @@ export default class Game{
 		list.forEach(function(item){
 			game.sfx[item] = new SFX({
 				context: game.sfx.context,
-				src:{mp3:`${game.assetsPath}sfx/${item}.mp3`, ogg:`${game.assetsPath}sfx/${item}.ogg`},
+				src:{mp3:`${game.assetsPath}${item}.mp3`, ogg:`${game.assetsPath}${item}.ogg`},
 				loop: (item=='factory' || item=='fan'),
 				autoplay: (item=='factory'|| item=='fan'),
 				volume: 0.3
@@ -208,7 +211,7 @@ export default class Game{
 	init() {
 		this.mode = this.modes.INITIALISING;
 
-		this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+		this.camera = new THREE.PerspectiveCamera( 45, this.container.scrollWidth / this.container.scrollHeight, 1, 2000 );
 		
 		let col = 0x605050;
 		this.scene = new THREE.Scene();
@@ -245,10 +248,13 @@ export default class Game{
 		//this.scene.add( grid );
 
 		// model
+//		console.log('loading loader')
 		const loader = new FBXLoader();
+		//console.log('loader loaded')
 		const game = this;
 		
-		loader.load( `${this.assetsPath}fbx/girl-walk.fbx`, function ( object ) {
+		loader.load( `${this.assetsPath}girl-walk.fbx`, function ( object ) {
+		//console.log('load loader object')
 
 			object.mixer = new THREE.AnimationMixer( object );
 			object.mixer.addEventListener('finished', function(e){
@@ -278,29 +284,26 @@ export default class Game{
 			
 			game.joystick = new JoyStick({
 				onMove: game.playerControl,
-				game: game,
-				container: this.container
+				game: game
 			});
 			
 			game.createCameras();
 			game.loadEnvironment(loader);
+		//console.log('loader object loaded')
 		}, null, this.onError );
+
 		
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
-		this.renderer.setSize( window.innerWidth, window.innerHeight );
+		this.renderer.setSize( this.container.scrollWidth, this.container.scrollHeight );
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 		this.renderer.shadowMapDebug = true;
 		this.container.appendChild( this.renderer.domElement );
 			
-		window.addEventListener( 'resize', function(){ game.onWindowResize(); }, false );
+		this.container.addEventListener( 'resize', function(){ game.onWindowResize(); }, false );
 
-		// stats
-		if (this.debug){
-			this.stats = new Stats();
-			this.container.appendChild( this.stats.dom );
-		}
+
 		
 		this.initSfx();
 	}
@@ -308,7 +311,7 @@ export default class Game{
     loadUSB(loader){
 		const game = this;
 		
-		loader.load( `${this.assetsPath}fbx/usb.fbx`, function ( object ) {
+		loader.load( `${this.assetsPath}usb.fbx`, function ( object ) {
 			game.scene.add(object);
 			
             const scale = 0.2;
@@ -333,7 +336,7 @@ export default class Game{
 	loadEnvironment(loader){
 		const game = this;
 		
-		loader.load( `${this.assetsPath}fbx/environment.fbx`, function ( object ) {
+		loader.load( `${this.assetsPath}environment.fbx`, function ( object ) {
 			game.scene.add(object);
 			game.doors = [];
 			game.fans = [];
@@ -400,7 +403,7 @@ export default class Game{
 	}
 	
 	playerControl(forward, turn){
-		//console.log(`playerControl(${forward}), ${turn}`);
+		////console.log(`playerControl(${forward}), ${turn}`);
 		turn = -turn;
 		
 		if (forward==0 && turn==0){
@@ -447,8 +450,9 @@ export default class Game{
 	
 	loadNextAnim(loader){
 		let anim = this.anims.pop();
+		//console.log('loadNextAnim', anim)
 		const game = this;
-		loader.load( `${this.assetsPath}fbx/${anim}.fbx`, function( object ){
+		loader.load( `${this.assetsPath}${anim}.fbx`, function( object ){
 			game.player[anim] = object.animations[0];
 			if (anim=='push-button'){
 				game.player[anim].loop = false;
@@ -526,10 +530,10 @@ export default class Game{
 	 }
 	
 	onWindowResize() {
-		this.camera.aspect = window.innerWidth / window.innerHeight;
+		this.camera.aspect = this.container.scrollWidth / this.container.scrollHeight;
 		this.camera.updateProjectionMatrix();
 
-		this.renderer.setSize( window.innerWidth, window.innerHeight );
+		this.renderer.setSize( this.container.scrollWidth, this.container.scrollHeight );
 
 	}
 
@@ -627,7 +631,7 @@ export default class Game{
 		const game = this;
 		const dt = this.clock.getDelta();
 		
-		requestAnimationFrame( function(){ game.animate(); } );
+		window.requestAnimationFrame( function(){ game.animate(); } );
 		
 		if (this.tweens.length>0){
 			this.tweens.forEach(function(tween){ tween.update(dt); });	
@@ -676,7 +680,7 @@ export default class Game{
             this.collect.forEach(function(object){
 				if (object.visible && game.player.object.position.distanceTo(object.position)<100){
 					game.actionBtn.style = 'display:block;';
-					game.onAction = { action:'gather-objects', mode:'collect', index:0, src:"usb.jpg" };
+					game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}usb.jpg` };
 					trigger = true;
 				}
 			});
@@ -702,8 +706,8 @@ export default class Game{
 	}
 	
 	onError(error){
-		const msg = 
-		console.error(JSON.stringify(error));
+		const msg = error.message
+		console.error(error);
 		console.error(error.message);
 	} 
 }
@@ -1048,7 +1052,7 @@ class JoyStick{
 		const thumb = document.createElement("div");
 		thumb.style.cssText = "position: absolute; left: 20px; top: 20px; width: 40px; height: 40px; border-radius: 50%; background: #fff;";
 		circle.appendChild(thumb);
-		(options.container ? options.container : document).body.appendChild(circle);
+		options.game.container.appendChild(circle);
 		this.domElement = thumb;
 		this.maxRadius = options.maxRadius || 40;
 		this.maxRadiusSquared = this.maxRadius * this.maxRadius;

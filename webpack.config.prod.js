@@ -4,6 +4,7 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const webpack = require("webpack");
 
 module.exports = {
@@ -42,7 +43,12 @@ module.exports = {
 	        //_: "lodash",
 	        cloudy: "cloudinary-core"
     	}),
-    	new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    	new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+		new CopyWebpackPlugin([{
+			from:'assets/**/*',
+			to:'assets',
+			flatten: true
+		}])
 	],
 	output: {
 		path: path.resolve(__dirname, './dist'),
