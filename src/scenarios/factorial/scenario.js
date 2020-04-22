@@ -1,4 +1,4 @@
-//earthican/scenario.js
+//factorial/scenario.js
 import _ from 'lodash'
 
 import air from './entity/diffuse/air.json'
@@ -25,7 +25,7 @@ function Savanna (Place, parentPlace) {
 */
 export function scenario (seed) {
 	return {
-		value: 'Earthican Human',
+		value: 'Factorial',
 		type: 'Selector',
 		tag: 'Scenario',
 		name: 'scenario',
@@ -45,4 +45,4 @@ export function scenario (seed) {
 	}
 }
 
-scenario.settingName = 'Earthican Human'
+scenario.settingName = 'Factorial'

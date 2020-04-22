@@ -9,7 +9,7 @@ import Game from '../frames/Game.jsx'
 
 const WelcomeView = () => [
 	<h1 class="app-title">Science</h1>
-];
+]
 
 //console.log('App')
 const App = {
@@ -21,10 +21,7 @@ const App = {
 				onmatch: Launcher
 
 			},
-			"/settings": {
-				onmatch: Settings
-
-			},
+			"/settings": Settings,
 			"/game": {
 				onmatch: Game
 			}

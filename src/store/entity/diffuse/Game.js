@@ -6,12 +6,11 @@ import _ from 'lodash'
 
 import Entity from '../Entity'
 //import Divine from '../discrete/Divine'
-import {getAll as getSettings} from  '../../../services/settings'
 
-export function Game() {
+export function Game(settings) {
 	//console.dir('Game construction begins')
 	Entity.call(this, undefined, {scale: 0})
-	_.assign(this, getSettings())
+	_.assign(this, settings)
 	this.value = this.scenario.value
 	//console.dir('Game scenario', Divine)
 	//this.scenario.starters = this.scenario.starterFunc({Divine: Divine})

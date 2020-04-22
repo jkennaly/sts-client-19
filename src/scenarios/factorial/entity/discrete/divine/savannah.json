@@ -1,0 +1,15 @@
+{
+	"value": "Human 1",
+	"type": "ShortText",
+	"tag": "Human Discrete Entity",
+	"name": "human",
+	"scale": 8,
+	"senses": [
+		["electrical", {
+		"value": "Sight",
+		"scale": 6,
+		"places": {}
+	}]
+	],
+	"profiles": ["divine", {}]
+}

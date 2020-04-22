@@ -21,7 +21,7 @@ import Place from '../../store/entity/place/Place'
 
 import {getOne as getPlayer} from  '../../services/vm/players'
 import {getOne as getPlace, registerGame} from  '../../services/vm/places'
-
+import {getAll as getSettings} from  '../../services/settings'
 import engine from  '../../services/engine/engine'
 
 
@@ -31,8 +31,9 @@ const Game = (vnode) => {
 	//make sure game has a player
 	//make sure player has a place
 	let game, universe, player1, starters
+	const settings = getSettings()
 	try {
-		game = new GameCon()
+		game = new GameCon(settings)
 		const registered = registerGame(_.cloneDeep(game))
 		//console.dir('Game game made', game, registered)
 		universe = getPlace({baseId: game.id, targetScale: 1})
