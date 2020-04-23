@@ -5,13 +5,16 @@ import m from 'mithril'
 import _ from 'lodash'
 
 
-import Game from '../../../../../vendor/create-a-3d-rpg-game-with-threejs/original/losttreasure/v4/game'
+import RPG from '../../../../services/displays/rpg/RPG'
 
 
 const ThirdPerson = {
 	oncreate ({dom}) {
-		const game = new Game(dom);
-		window.game = game;//For debugging only
+		const rpg = new RPG({
+			container: dom,
+			
+		})
+		window.rpg = rpg;//For debugging only
 	},
 	view: ({attrs}) => <div class="sts-canvas-wrapper">
 		<div id="message">

@@ -50,6 +50,7 @@
     "three-fbxloader-offical": "^1.0.0",
     "threejs-2d-components": "0.0.4",
     "uuid": "^3.3.2",
+    "webgl-detector": "^1.1.11",
     "webrtc-sdk": "^2.2.5",
     "webxr-boilerplate": "^0.2.3",
     "workbox-sw": "^5.1.2",

@@ -24,7 +24,7 @@ module.exports = {
 		}),
 		new ImportHttpWebpackPlugin(),
 		new CopyWebpackPlugin([{
-			from:'assets/**/*',
+			from:'scenarios/**/assets/**/*',
 			to:'assets',
 			flatten: true
 		}])

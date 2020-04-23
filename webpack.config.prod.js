@@ -45,7 +45,7 @@ module.exports = {
     	}),
     	new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 		new CopyWebpackPlugin([{
-			from:'assets/**/*',
+			from:'scenarios/**/assets/**/*',
 			to:'assets',
 			flatten: true
 		}])
