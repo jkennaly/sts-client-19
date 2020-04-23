@@ -30,6 +30,12 @@ export function scenario (seed) {
 		tag: 'Scenario',
 		name: 'scenario',
 		id: 'sts-setting-scenario',
+		assetFiles: {
+			anims: ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"],
+			sfx: ['gliss', 'factory', 'button', 'door', 'fan'],
+			entities: ['girl-walk', 'usb'],
+			places: ['environment']
+		},
 		starterFunc: function({Divine, getPlace, universe}) {
 			const firstPlace = getPlace({
 				baseId: universe.id, 

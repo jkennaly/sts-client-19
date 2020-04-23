@@ -27,11 +27,17 @@ function Savanna (Place, parentPlace) {
 */
 export function scenario (seed) {
 	return {
-		value: 'Factorial',
-		type: 'Selector',
-		tag: 'Scenario',
-		name: 'scenario',
 		id: 'sts-setting-scenario',
+		name: 'scenario',
+		tag: 'Scenario',
+		type: 'Selector',
+		value: 'Factorial',
+		assetFiles: {
+			anims: ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"],
+			sfx: ['gliss', 'factory', 'button', 'door', 'fan'],
+			entities: ['girl-walk', 'usb'],
+			places: ['environment']
+		},
 		starterFunc: function({Divine, getPlace, universe}) {
 			const firstPlace = getPlace({
 				baseId: universe.id, 

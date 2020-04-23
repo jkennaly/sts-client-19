@@ -79,7 +79,7 @@ const Game = (vnode) => {
 		},
 		view: () => <div class="sts-frame-game">
 			{
-				//console.dir(game)
+				//console.dir('Game.jsx', game)
 			}
 			<Self cards={player1Cards} focus={{}} />
 			<Active 
@@ -107,6 +107,7 @@ const Game = (vnode) => {
 					action={activeAction}
 					endAction={c => activeAction = undefined}
 					engine={engine}
+					scenario={_.get(game, 'scenario')}
 				/>
 			</div>
 				<TextEntryModal 

@@ -9,10 +9,10 @@ import RPG from '../../../../services/displays/rpg/RPG'
 
 
 const ThirdPerson = {
-	oncreate ({dom}) {
+	oncreate ({dom, attrs}) {
 		const rpg = new RPG({
 			container: dom,
-			
+			scenario: attrs.scenario
 		})
 		window.rpg = rpg;//For debugging only
 	},

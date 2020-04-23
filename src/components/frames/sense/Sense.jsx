@@ -33,6 +33,7 @@ const Sense = (vnode) => {
 						action={attrs.action}
 						endAction={attrs.endAction}
 						engine={attrs.engine}
+						scenario={attrs.scenario}
 					/> :
 					attrs.selectedSenses.some(s => s.defaultView === 'voxel') ? <Voxel 
 						cards={attrs.cards} 
@@ -41,6 +42,7 @@ const Sense = (vnode) => {
 						action={attrs.action}
 						endAction={attrs.endAction}
 						engine={attrs.engine}
+						scenario={attrs.scenario}
 					/> :
 					''
 				}

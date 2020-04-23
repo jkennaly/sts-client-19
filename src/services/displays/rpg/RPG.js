@@ -4,9 +4,10 @@
 import { isWebGLSupported} from 'webgl-detector';
 import * as THREE from 'three'
 import FBXLoader from 'three-fbxloader-offical'
+import _ from 'lodash'
 
 export default class RPG{
-	constructor({container}){
+	constructor({container, scenario}){
 		if ( ! isWebGLSupported() ) throw new Error('WebGL Not supported');
 
 		this.modes = Object.freeze({
@@ -39,7 +40,7 @@ export default class RPG{
 		
 		this.messages = { 
 			text:[ 
-			"Welcome to LostTreasure",
+			"Welcome to Factorial",
 			"GOOD LUCK!"
 			],
 			index:0
@@ -64,24 +65,25 @@ export default class RPG{
 		
 		this.assetsPath = 'assets/';
 		
+		const scenarioAssets = _.map(scenario.assetFiles, (assets, assetType) => {
+			if(['anims', 'entities', 'places'].includes(assetType)) return assets.map(anim => `${this.assetsPath}${anim}.fbx`)
+			return assets.map(s => `${this.assetsPath}${s}.${sfxExt}`)
+		})
+			.flat()
+
+
+
+		//console.dir('RPG Scenario assets', scenario.assetFiles, scenarioAssets)
+
 		const options = {
-			assets:[
-                `${this.assetsPath}gliss.${sfxExt}`,
-				`${this.assetsPath}factory.${sfxExt}`,
-				`${this.assetsPath}button.${sfxExt}`,
-				`${this.assetsPath}door.${sfxExt}`,
-                `${this.assetsPath}fan.${sfxExt}`,
-				`${this.assetsPath}environment.fbx`,
-				`${this.assetsPath}girl-walk.fbx`,
-                `${this.assetsPath}usb.fbx`,
-			],
+			assets: scenarioAssets,
 			oncomplete: function(){
 				game.init();
 				game.animate();
 			}
 		}
 		
-		this.anims.forEach( function(anim){ options.assets.push(`${game.assetsPath}${anim}.fbx`)});
+		//this.anims.forEach( function(anim){ options.assets.push(`${game.assetsPath}${anim}.fbx`)});
 		
 		this.mode = this.modes.PRELOAD;
 		
