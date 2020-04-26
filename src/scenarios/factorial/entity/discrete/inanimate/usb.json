@@ -1,0 +1,19 @@
+{
+	"value": "USB 1",
+	"type": "ShortText",
+	"tag": "USB Discrete Entity",
+	"name": "usb",
+	"scale": 9,
+	"senses": [
+		["electrical", {
+			"value": "Power",
+			"scale": 9,
+			"places": {}
+		}]
+	],
+	"located": {
+		"factorial-factory": [-416, 0.8, -472]
+	},
+	"defaultSense": "Power",
+	"profiles": [["electrical", {}], ["mechanical", {}]]
+}

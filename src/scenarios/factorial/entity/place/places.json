@@ -1,12 +1,11 @@
 {
 	"universe": {
-		"name": "Earthican Universe",
+		"name": "Universe",
 		"scale": 1,
 		"coords": "rectangular"
-
 	},
 	"galaxy": {
-		"name": "Milky Way Galaxy",
+		"name": "Galaxy",
 		"scale": 2,
 		"coords": "spherical",
 		"postion": {
@@ -16,7 +15,7 @@
 		}
 	},
 	"star": {
-		"name": "Sun",
+		"name": "Star",
 		"scale": 3,
 		"coords": "spherical",
 		"postion": {
@@ -24,10 +23,9 @@
 			"θ": 0,
 			"φ": 0
 		}
-
 	},
 	"planet": {
-		"name": "Earth",
+		"name": "Planet",
 		"scale": 4,
 		"coords": "spherical",
 		"postion": {
@@ -35,10 +33,9 @@
 			"θ": 0,
 			"φ": 0
 		}
-
 	},
 	"region": {
-		"name": "Ethiopia",
+		"name": "Region",
 		"scale": 5,
 		"con": "Savanna",
 		"coords": "rectangular",
@@ -47,39 +44,45 @@
 			"θ": 0,
 			"φ": 0
 		}
-
 	},
 	"area": {
 		"scale": 6,
-		"con": "Savanna",
+		"con": "Area",
 		"coords": "rectangular",
 		"postion": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		}
-
 	},
 	"location": {
 		"scale": 7,
-		"con": "Savanna",
+		"con": "Factory",
 		"coords": "rectangular",
 		"postion": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		}
-
 	},
 	"object": {
 		"scale": 8,
-		"biome": "grass",
+		"biome": "floor",
 		"coords": "rectangular",
 		"postion": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		}
-
+	},
+	"component": {
+		"scale": 9,
+		"biome": "floor",
+		"coords": "rectangular",
+		"postion": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		}
 	}
 }
