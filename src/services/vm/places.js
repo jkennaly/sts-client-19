@@ -58,6 +58,19 @@ export function getOne({baseId, targetScale, targetId, templates}) {
 	return create(basePlace, targetScale, templates)
 }
 
+export function createSetpieces({baseId, templates, setpieces}) {
+	const basePlace = placeRegistry.getItem({id: baseId})
+	//if the basePlace is not registered, throw
+	if(!basePlace) throw new Error(
+		'Base Undefined',
+		`Given targetScale: ${targetScale}`,
+		`Given targetId: ${targetId}`,
+		`Given baseId: ${baseId}`
+	)
+	const setpieceTemplates = setpieces.map(s => [...(_.filter(templates, t => t.scale < _.max(s.scales))), s])	
+	return setpieceTemplates.map((t, i) => getOne({baseId: baseId, targetScale: _.max(setpieces[i].scales), templates: setpieceTemplates}))
+}
+
 export function registerGame(game) {
 	return placeRegistry.upsertItem(game)
 }

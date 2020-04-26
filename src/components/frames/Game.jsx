@@ -18,7 +18,7 @@ import Place from '../../store/entity/place/Place'
 
 
 import {getOne as getPlayer} from  '../../services/vm/players'
-import {getOne as getPlace, registerGame} from  '../../services/vm/places'
+import {getOne as getPlace, registerGame, createSetpieces as createPlaces} from  '../../services/vm/places'
 import {getAll as getSettings} from  '../../services/settings'
 import engine from  '../../services/engine/engine'
 
@@ -55,7 +55,12 @@ const Game = {
 		//console.dir('Game game made', game, registered)
 		universe = getPlace({baseId: game.id, targetScale: 1})
 		player1 = getPlayer(undefined, universe)
-		starters = game.scenario.starterFunc({Divine: Divine, getPlace: getPlace, universe: universe})
+		starters = game.scenario.starterFunc({
+			Divine: Divine, 
+			createPlaces: createPlaces, 
+			getPlace: getPlace, 
+			universe: universe
+		})
 		selfFocusIds = [player1.id]
 		senseCards = starters
 		activeCards = []

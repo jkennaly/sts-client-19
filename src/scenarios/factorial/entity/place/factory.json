@@ -1,0 +1,16 @@
+{
+	"value": "Factory",
+	"type": "ShortText",
+	"tag": "Factory Place Entity",
+	"name": "factory",
+	"scales": [7],
+	"senses": [],
+	"profiles": [["mechanical", {"radiation": {
+		"assetName": "factory",
+		"assetType": "sfx"
+	}}]],
+	"defaultSubBiome": "floor",
+	"defaultSubHole": "air",
+	"biome": "industrial",
+	"reference": "factorial-factory"
+}

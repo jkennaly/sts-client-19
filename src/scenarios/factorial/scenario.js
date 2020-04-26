@@ -7,12 +7,10 @@ import air from './entity/diffuse/air.json'
 import ground from './entity/diffuse/ground.json'
 
 import human from './entity/discrete/divine/human.json'
-import wolf from './entity/discrete/fauna/wolf.json'
-import tree from './entity/discrete/flora/tree.json'
-import rock from './entity/discrete/inanimate/rock.json'
+import usb from './entity/discrete/inanimate/usb.json'
 
 import places from './entity/place/places.json'
-import savanna from './entity/place/savanna.json'
+import factory from './entity/place/factory.json'
 
 function Human (Divine, startPlace) {
 	//console.dir('Human scenario', Divine, human)
@@ -27,6 +25,7 @@ function Savanna (Place, parentPlace) {
 */
 
 export function scenario (seed) {
+	console.dir('Factorial scenario.js', factory.profiles)
 	return {
 		id: 'sts-setting-scenario',
 		name: 'scenario',
@@ -35,21 +34,27 @@ export function scenario (seed) {
 		value: 'Factorial',
 		assetFiles: {
 			anims: ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"],
-			sfx: ['gliss', 'factory', 'button', 'door', 'fan'],
+			sfx: ['gliss', 'button', 'door', 'fan', ...factory.profiles.filter(p => p[0] === 'mechanical' && p[1].radiation.assetType === 'sfx').map(p => p[1].radiation.assetName)],
 			entities: ['girl-walk', 'usb'],
 			places: ['environment']
 		},
-		starterFunc: function({Divine, getPlace, universe}) {
-			const firstPlace = getPlace({
+		starterFunc: function({Divine, createPlaces, universe}) {
+			const starterPlaces = {
 				baseId: universe.id, 
-				targetScale: human.scale, 
-				templates: places
-			})
-			/*
+				templates: places,
+				setpieces: [factory]
+			}
+			try {
+
+				const firstPlace = createPlaces(starterPlaces)[0]
+				const first = new Human(Divine, firstPlace)
+				return [ first ]
+			} catch (err) {
+				console.error(err)
+			}
+			
 			return []
-			*/
-			const first = new Human(Divine, firstPlace)
-			return [ first ]
+			
 		}
 	}
 }
