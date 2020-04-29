@@ -37,7 +37,6 @@
 	"region": {
 		"name": "Region",
 		"scale": 5,
-		"con": "Savanna",
 		"coords": "rectangular",
 		"postion": {
 			"r": 6,
@@ -47,7 +46,6 @@
 	},
 	"area": {
 		"scale": 6,
-		"con": "Area",
 		"coords": "rectangular",
 		"postion": {
 			"x": 0,

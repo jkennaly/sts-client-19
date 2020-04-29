@@ -12,7 +12,10 @@ const ThirdPerson = {
 	oncreate ({dom, attrs}) {
 		const rpg = new RPG({
 			container: dom,
-			scenario: attrs.scenario
+			scenario: attrs.scenario,
+			engine: attrs.engine,
+			place: attrs.place,
+			sensor: attrs.sensor
 		})
 		window.rpg = rpg;//For debugging only
 	},

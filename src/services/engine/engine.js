@@ -111,8 +111,11 @@ const sense = forces => {
 	return gameState.entities.filter(e => e.detectable(forces))
 
 }
-export default {
+const engine = {
 	queue: queue,
 	start: start,
-	sense: sense
+	sense: sense,
+	gameState: () => gameState
 }
+window.engine = engine
+export default engine

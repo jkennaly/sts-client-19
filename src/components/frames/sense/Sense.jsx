@@ -55,6 +55,8 @@ const Sense = (vnode) => {
 					attrs.selectedSenses.some(s => s.defaultView === 'voxel') ? <Voxel 
 						engine={attrs.engine}
 						scenario={attrs.scenario}
+						place={attrs.place}
+						sensor={attrs.sensor}
 					/> :
 					''
 				}

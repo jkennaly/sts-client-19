@@ -12,9 +12,14 @@ import JoyStick from './libs/JoyStick'
 import Tween from './libs/Tween'
 
 export default class RPG{
-	constructor({container, scenario}){
+	constructor({container, scenario, engine, place, sensor}){
 		if ( ! isWebGLSupported() ) throw new Error('WebGL Not supported');
 		window.rpg = this
+		this.engine = engine
+		this.place = place
+		this.sensor = sensor
+
+
 		this.modes = Object.freeze({
 			NONE:   Symbol("none"),
 			PRELOAD: Symbol("preload"),
@@ -76,7 +81,7 @@ export default class RPG{
 		})
 			.flat()
 
-		console.dir('RPG Scenario assets', scenario.assetFiles, scenarioAssets)
+		//console.dir('RPG Scenario assets', scenario.assetFiles, scenarioAssets)
 
 
 

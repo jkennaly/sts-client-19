@@ -146,6 +146,8 @@ const Game = {
 					engine={engine}
 					scenario={_.get(game, 'scenario')}
 					focus={senseFocusIds}
+					sensor={_.find(player1Cards, c => c && c.focus.value)}
+					place={_.get(_.find(player1Cards, c => c && c.focus.value), 'place')}
 				/>
 			</div> : ''}
 				<TextEntryModal 
