@@ -22,9 +22,8 @@ module.exports = {
 			inject: "body",
 			favicon: 'src/favicon.ico'
 		}),
-		new ImportHttpWebpackPlugin(),
 		new CopyWebpackPlugin([{
-			from:'scenarios/**/assets/**/*',
+			from:'src/scenarios/**/assets/**/*',
 			to:'assets',
 			flatten: true
 		}])

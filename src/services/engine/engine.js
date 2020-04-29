@@ -50,7 +50,7 @@ const start = (startObjects, notify) => {
 	starters = startObjects
 	actionQueue = []
 	senseQueue = []
-	gameState = evalTick(gameState, actionQueue, senseQueue, {registry: starters})
+	gameState = evalTick(undefined, actionQueue, senseQueue, {registry: starters})
 	setInterval(nextTick, 1000, notify)
 	global.game = gameState
 	//console.dir('engine start starters' , starters)

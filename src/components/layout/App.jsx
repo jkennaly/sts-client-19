@@ -17,14 +17,9 @@ const App = {
 		//console.log('App created')
 		const mainStage = vnode.dom.querySelector("#main-stage");
 		m.route(mainStage, "/launcher", {
-			"/launcher": {
-				onmatch: Launcher
-
-			},
+			"/launcher": Launcher,
 			"/settings": Settings,
-			"/game": {
-				onmatch: Game
-			}
+			"/game": Game
 		});
 		//m.mount(document.getElementById("DisplayBar"), DisplayBar)
 	},

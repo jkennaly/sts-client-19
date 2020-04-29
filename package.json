@@ -9,8 +9,6 @@
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-proposal-export-default-from": "^7.2.0",
     "@babel/preset-env": "^7.4.5",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-transform-react-jsx": "^6.24.1",
@@ -53,6 +51,7 @@
     "webgl-detector": "^1.1.11",
     "webrtc-sdk": "^2.2.5",
     "webxr-boilerplate": "^0.2.3",
+    "workbox": "0.0.0",
     "workbox-sw": "^5.1.2",
     "xxhashjs": "^0.2.2"
   },

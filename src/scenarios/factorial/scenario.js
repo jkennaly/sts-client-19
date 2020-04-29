@@ -25,6 +25,7 @@ function Savanna (Place, parentPlace) {
 	Place.call(this, parentPlace, undefined, savanna)
 }
 */
+
 export function scenario (seed) {
 	return {
 		id: 'sts-setting-scenario',
