@@ -8,11 +8,15 @@ import registry from '../registry'
 
 const placeRegistry = registry('Place')
 
-export function create(basePlace, targetScale, templates) {
+export function create(basePlace, targetScale, templates, connections) {
 	if(basePlace && basePlace.scale >= targetScale) return basePlace
-	const nextPlace = new Place(basePlace)
+	//choose a template
+	const template = _.find(templates, t => t.scale === (basePlace.scale + 1) || t.scales && t.scales.includes((basePlace.scale + 1)))
+
+	const nextPlace = new Place(basePlace, connections, template)
 	placeRegistry.upsertItem(nextPlace)
-	return create(nextPlace, targetScale, templates)
+	//console.dir('places create', template, templates, nextPlace)
+	return create(nextPlace, targetScale, templates, connections)
 }
 
 export function getOne({baseId, targetScale, targetId, templates}) {
@@ -68,7 +72,9 @@ export function createSetpieces({baseId, templates, setpieces}) {
 		`Given baseId: ${baseId}`
 	)
 	const setpieceTemplates = setpieces.map(s => [...(_.filter(templates, t => t.scale < _.max(s.scales))), s])	
-	return setpieceTemplates.map((t, i) => getOne({baseId: baseId, targetScale: _.max(setpieces[i].scales), templates: setpieceTemplates}))
+	const setScales = setpieces.map((v, i) => _.max(setpieces[i].scales))
+	//console.dir('createSetpieces scale and templates', setScales, setpieceTemplates)
+	return setpieceTemplates.map((t, i) => getOne({baseId: baseId, targetScale: setScales[i], templates: t}))
 }
 
 export function registerGame(game) {

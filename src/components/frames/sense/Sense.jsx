@@ -43,6 +43,8 @@ const Sense = (vnode) => {
 						endAction={attrs.endAction}
 						engine={attrs.engine}
 						scenario={attrs.scenario}
+						place={attrs.place}
+						sensor={attrs.sensor}
 					/> :
 					''
 				}

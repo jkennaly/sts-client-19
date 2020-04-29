@@ -16,10 +16,13 @@ const derivativeValues = parentPlace => _.clone(parentPlace.placeValues)
 
 
 function Place(parentPlace, connections = [], template = {}) {
-	//console.dir('Place', parentPlace, connections)
+	//console.dir('Place', parentPlace, template)
 	Entity.call(this)
 	this.parentId = parentPlace.id
 	
+	this.type = template.type ? template.type : 'ShortText'
+	this.tag = template.tag ? template.tag : 'Player'
+	this.name = template.name ? template.name : 'player'
 	this.scale = parentPlace && parentPlace.scale ? parentPlace.scale + 1 : 1
 	//if this.scale is 1, create intital universe values from the seed
 	//if this scale is greater than 1, create derivative place values from the parentPlace
@@ -28,7 +31,7 @@ function Place(parentPlace, connections = [], template = {}) {
 	//execute each connection function to modify values as needed by existing places
 	this.placeValues = connections.reduce((pv, cv) => cv(pv), baseValues)
 
-	
+
 }
 Place.prototype = Object.create(Entity.prototype)
 

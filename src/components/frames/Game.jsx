@@ -113,6 +113,8 @@ const Game = (vnode) => {
 					endAction={c => activeAction = undefined}
 					engine={engine}
 					scenario={_.get(game, 'scenario')}
+					sensor={_.find(player1Cards, c => c && c.focus.value)}
+					place={_.get(_.find(player1Cards, c => c && c.focus.value), 'place')}
 				/>
 			</div>
 				<TextEntryModal 
