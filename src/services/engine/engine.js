@@ -29,10 +29,12 @@ let starters
 let actionQueue
 let senseQueue
 let gameState
+let interval
 
 const nextTick = notify => {
 	gameState = evalTick(gameState, actionQueue, senseQueue)
 	actionQueue = []
+	//console.dir('nextTick time', Date.now() % 10000)
 	notify(gameState)
 	localforage.setItem('gameState', JSON.stringify(gameState))
 
@@ -101,7 +103,8 @@ const start = (startObjects, notify, scenario) => {
 	//console.dir('save gameState isCyclic', isCyclic(gameState))
 	if(isCyclic(gameState)) console.error('circular gameState', gameState)
 	localforage.setItem('gameState', JSON.stringify(gameState))
-	setInterval(nextTick, 1000, notify)
+	if(interval) clearInterval(interval)
+	interval = setInterval(nextTick, 1000, notify)
 	global.game = gameState
 	//console.dir('engine start starters' , starters)
 	//console.dir(players)

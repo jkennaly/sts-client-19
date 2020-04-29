@@ -13,8 +13,8 @@ import places from './entity/place/places.json'
 import factory from './entity/place/factory.json'
 
 function Human (Divine, startPlace) {
-	//console.dir('Human scenario', Divine, human)
 	Divine.call(this, undefined, _.set(human, 'startPlace', startPlace))
+	//console.dir('Human scenario', this)
 }
 /*
 function Savanna (Place, parentPlace) {
@@ -25,7 +25,7 @@ function Savanna (Place, parentPlace) {
 */
 
 export function scenario (seed) {
-	console.dir('Factorial scenario.js', factory.profiles)
+	//console.dir('Factorial scenario.js', factory.profiles)
 	return {
 		id: 'sts-setting-scenario',
 		name: 'scenario',
