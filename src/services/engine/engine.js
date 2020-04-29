@@ -41,7 +41,7 @@ const queue = {
 	add: (actions) => {
 		if(!actionQueue) return false
 		actionQueue = _.uniqBy([...actionQueue, ...actions], 'id')
-		console.dir('queue', actionQueue)
+		//console.dir('queue', actionQueue)
 		return true
 	},
 	addSense: senses => {

@@ -2,6 +2,7 @@
 // components/elements/cards
 
 import m from 'mithril'
+import _ from 'lodash'
 
 import SubjectSquare from './SubjectSquare.jsx'
 import DataActionField from './DataActionField.jsx'
@@ -15,7 +16,12 @@ const Card = {
         '')
     } 
     key={attrs.card.key} 
-    onclick={attrs.clickFunction && attrs.valid !== false ? e => attrs.clickFunction(attrs.card.subject.id) : e => e}
+    onclick={attrs.clickFunction && attrs.valid !== false ? (e => {
+      //console.dir('Card click', attrs.card)
+      if(!_.get(attrs, 'card.subject.effective', true)) return attrs.card.subject.action()
+     return attrs.clickFunction(attrs.card.subject.id)
+
+    }) : e => e}
   >
     <div class="sts-horizontal-fields">
     {

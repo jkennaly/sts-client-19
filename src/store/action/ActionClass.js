@@ -10,6 +10,7 @@ import Store from '../Store'
 function ActionClass (id, opts = {}) {
 	Store.call(this, id, opts)
 	this.source = opts.source
+	this.effective = true
 }
 ActionClass.prototype = Object.create(Store.prototype)
 

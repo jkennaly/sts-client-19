@@ -37,7 +37,7 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 		const source = newState.entities.find(e => e.id === a.action.source)
 		const sourceIndex = newState.entities.findIndex(e => e.id === a.action.source)
 		
-		console.dir('evalTick action execution', a, source, sourceIndex)
+		//console.dir('evalTick action execution', a, source, sourceIndex)
 		if(!source || !sourceIndex) return true
 		const energyRequired = a.action.activation.energy
 		const sourceEnergy = source.energy.available

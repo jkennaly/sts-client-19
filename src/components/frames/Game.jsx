@@ -105,7 +105,7 @@ const Game = {
 
 				}}
 				endAction={c => {
-					actionFocusIds = actionFocusIds.filter(afi => afi !== actionCard.id)
+					actionFocusIds = actionFocusIds.filter(afi => afi !== c.id)
 					activeAction = undefined
 
 				}}
