@@ -15,7 +15,12 @@ const SenseBar = (vnode) => {
 		{children}
 			{
 
-				attrs.cards.map(c => <Card clickFunction={attrs.clickFunction} card={{key: c.id, subject:c}} valid={Boolean(attrs.valid.find(v => v.id === c.id))} />)
+				attrs.cards.map(c => <Card 
+					clickFunction={attrs.clickFunction} 
+					card={{key: c.id, subject:c}} 
+					valid={Boolean(attrs.valid.find(v => v.id === c.id))} 
+					focus={attrs.focus.includes(c.id)}
+				/>)
 			}
 	</div>
 }}

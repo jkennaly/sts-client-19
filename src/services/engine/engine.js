@@ -2,8 +2,14 @@
 //services/engine
 
 import _ from 'lodash'
+import localforage from 'localforage'
 
 import evalTick from './evalTick'
+
+localforage.config({
+	name: "STS-OOI",
+	storeName: "last-gamestate"
+})
 
 //startup
 
@@ -28,14 +34,14 @@ const nextTick = notify => {
 	gameState = evalTick(gameState, actionQueue, senseQueue)
 	actionQueue = []
 	notify(gameState)
-	//console.dir('nextTick', gameState.game)
+	localforage.setItem('gameState', JSON.stringify(gameState))
 
 }
 const queue = {
 	add: (actions) => {
 		if(!actionQueue) return false
 		actionQueue = _.uniqBy([...actionQueue, ...actions], 'id')
-		//console.dir('queue', actionQueue)
+		console.dir('queue', actionQueue)
 		return true
 	},
 	addSense: senses => {
@@ -46,11 +52,55 @@ const queue = {
 
 	}
 }
-const start = (startObjects, notify) => {
+function isCyclic(obj) {
+  var keys = [];
+  var stack = [];
+  var stackSet = new Set();
+  var detected = false;
+
+  function detect(obj, key) {
+    if (obj && typeof obj != 'object') { return; }
+
+    if (stackSet.has(obj)) { // it's cyclic! Print the object and its locations.
+      var oldindex = stack.indexOf(obj);
+      var l1 = keys.join('.') + '.' + key;
+      var l2 = keys.slice(0, oldindex + 1).join('.');
+      console.log('CIRCULAR: ' + l1 + ' = ' + l2 + ' = ' + obj);
+      console.log(obj);
+      detected = true;
+      return;
+    }
+
+    keys.push(key);
+    stack.push(obj);
+    stackSet.add(obj);
+    for (var k in obj) { //dive on the object's children
+      if (Object.prototype.hasOwnProperty.call(obj, k)) { detect(obj[k], k); }
+    }
+
+    keys.pop();
+    stack.pop();
+    stackSet.delete(obj);
+    return;
+  }
+
+  detect(obj, 'obj');
+  return detected;
+}
+
+const start = (startObjects, notify, scenario) => {
 	starters = startObjects
 	actionQueue = []
 	senseQueue = []
-	gameState = evalTick(undefined, actionQueue, senseQueue, {registry: starters})
+	try {
+		gameState = evalTick(undefined, actionQueue, senseQueue, {registry: starters})
+	} catch (err) {
+		throw (err)
+	}
+	//console.dir('save gameState', gameState)
+	//console.dir('save gameState isCyclic', isCyclic(gameState))
+	if(isCyclic(gameState)) console.error('circular gameState', gameState)
+	localforage.setItem('gameState', JSON.stringify(gameState))
 	setInterval(nextTick, 1000, notify)
 	global.game = gameState
 	//console.dir('engine start starters' , starters)

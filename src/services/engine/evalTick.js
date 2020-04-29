@@ -14,6 +14,11 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 		scenario.registry ? scenario.registry : 
 		[]
 
+	if(!newState.game) {
+		console.dir('evalTick currentState', currentState)
+		throw 'no Scenario'
+
+	}
 	newState.game.currentTick = newState.game.currentTick + 1
 
 
@@ -21,6 +26,7 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 	const sortedActions = actions.sort((a, b) => a.source.localeCompare(b.source))
 	
 	_.forEach(sortedActions, a => {
+		//console.dir('evalTick sortedActions', a)
 		//prepare execution plan
 		const targets = a.targetIds.map(t => newState.entities.find(e => e.id === t))
 		//if there are any undefined targets then end
@@ -28,9 +34,10 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 		//if there are any invalid targets remove them from the list
 		const validTargets =  _.filter(targets, t => a.action.targetable(t))
 		if(!validTargets.length) return true
-		const source = newState.entities.find(e => e.id === a.action.source.id)
-		const sourceIndex = newState.entities.findIndex(e => e.id === a.action.source.id)
-		//console.dir('evalTick action execution', a, source, sourceIndex)
+		const source = newState.entities.find(e => e.id === a.action.source)
+		const sourceIndex = newState.entities.findIndex(e => e.id === a.action.source)
+		
+		console.dir('evalTick action execution', a, source, sourceIndex)
 		if(!source || !sourceIndex) return true
 		const energyRequired = a.action.activation.energy
 		const sourceEnergy = source.energy.available
@@ -54,6 +61,7 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 	})
 
 	//check for avatar update
+	//console.dir('evalTick actions', actions, newState.entities)
 	newState.avatar = actions.length ?  newState.entities.find(e => e.effects.find(ef => ef.name === 'avatar')) : currentState.avatar
 
 	//check for new places sensed by controlled

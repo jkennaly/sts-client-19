@@ -13,17 +13,17 @@ const List = (vnode) => {
 			{
 
 				attrs.cards
-					.filter(c => attrs.senses.filter(s => attrs.validSenses.find(v => s.id === v.id)).find(sense => sense.focus.value && c.profiles.find(p => p.value === sense.value)))
+					.filter(c => attrs.senses.filter(s => attrs.validSenses.find(v => s.id === v.id)).find(sense => attrs.focus.includes(sense.id) && c.profiles.find(p => p.value === sense.value)))
 					.map(c => <Card 
 						clickFunction={() => {
-							if(!attrs.action) return
+							if(!attrs.activeAction) return
 							//add action to queue with the card as target
-							//console.dir('Sense clicked action', attrs.action, c)
-							attrs.action.action(attrs.engine)(c.id)
-							attrs.endAction()
+							//console.dir('Sense clicked action', attrs.activeAction, c)
+							attrs.activeAction.action(attrs.engine)(c.id)
+							attrs.endAction(c)
 						}} 
 						card={{key: c.id, subject:c}} 
-						targetable={Boolean(attrs.action && c.profiles.find(p => attrs.action.targetable(p, c.effects)))}
+						targetable={Boolean(attrs.activeAction && c.profiles.find(p => attrs.activeAction.targetable(p, c.effects)))}
 					/>)
 			}
 		</div>

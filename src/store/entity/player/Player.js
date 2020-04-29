@@ -22,7 +22,7 @@ function Player (id, opts = {}) {
 	this.type = 'ShortText'
 	this.tag = 'Player'
 	this.name = 'player'
-	this.actions.push(new Inspire(undefined, {source: this}))
+	this.actions.push(new Inspire(undefined, {source: this.id}))
 	this.senses.push(new Divine())
 	this.defaultSense = 'Divine'
 	//players perceive controllable entities

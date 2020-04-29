@@ -11,7 +11,7 @@ const Card = {
     class={'sts-card' + 
       (attrs.valid === false ? ' sts-card-focus-invalid' : 
         attrs.targetable === true ? ' sts-card-focus-targetable' : 
-        attrs.card.subject.focus.value ? ' sts-card-focus' : 
+        attrs.focus === true ? ' sts-card-focus' : 
         '')
     } 
     key={attrs.card.key} 
