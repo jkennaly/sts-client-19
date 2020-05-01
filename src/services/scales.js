@@ -22,6 +22,7 @@ export const scales = [
 //Area-6-10km
 //Location-7-100m
 //Object-8-1m
+//-9-1cm
 
 global.GAME = 0
 global.UNIVERSE = 1

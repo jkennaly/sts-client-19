@@ -118,7 +118,8 @@ const engine = {
 	queue: queue,
 	start: start,
 	sense: sense,
-	gameState: () => gameState
+	gameState: () => gameState,
+	at: placeId => gameState.entities.filter(e => e.place && (e.place.id === placeId))
 }
 window.engine = engine
 export default engine

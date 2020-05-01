@@ -21,8 +21,9 @@ function Place(parentPlace, connections = [], template = {}) {
 	this.parentId = parentPlace.id
 	
 	this.type = template.type ? template.type : 'ShortText'
-	this.tag = template.tag ? template.tag : 'Player'
-	this.name = template.name ? template.name : 'player'
+	this.tag = template.tag ? template.tag : 'Place'
+	this.name = template.name ? template.name : 'place'
+	this.reference = template.reference
 	this.scale = parentPlace && parentPlace.scale ? parentPlace.scale + 1 : 1
 	//if this.scale is 1, create intital universe values from the seed
 	//if this scale is greater than 1, create derivative place values from the parentPlace

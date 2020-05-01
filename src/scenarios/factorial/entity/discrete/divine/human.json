@@ -12,5 +12,24 @@
 	}]
 	],
 	"defaultSense": "Sight",
+	"located": {
+		"factorial-factory": [-732, 0.8, 269]
+	},
+	"assets": {
+		"addition": {
+			"assetType": "fbx",
+			"assetName": "girl-walk"
+		},
+		"animations": {
+			"assetType": "fbx",
+			"assetNames": [
+				"ascend-stairs", 
+				"gather-objects", 
+				"look-around", 
+				"push-button", 
+				"run"
+			]
+		}
+	},
 	"profiles": [["divine", {}]]
 }

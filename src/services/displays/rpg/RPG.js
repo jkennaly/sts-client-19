@@ -70,7 +70,7 @@ export default class RPG{
 		
 		const sfxExt = SFX.supportsAudioType('mp3') ? 'mp3' : 'ogg';
 		const game = this;
-		this.anims = ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"];
+		//this.anims = ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"];
 		this.tweens = [];
 		
 		this.assetsPath = 'assets/';
@@ -89,8 +89,8 @@ export default class RPG{
 			assets: scenarioAssets,
 			container: this.container,
 			oncomplete: function(){
-				game.init();
-				game.animate();
+				game.init()
+				//game.animate()
 			}
 		}
 		
@@ -269,44 +269,7 @@ export default class RPG{
 		//console.log('loader loaded')
 		const game = this;
 		
-		loader.load( `${this.assetsPath}girl-walk.fbx`, function ( object ) {
-		//console.log('load loader object')
-
-			object.mixer = new THREE.AnimationMixer( object );
-			object.mixer.addEventListener('finished', function(e){
-				game.action = 'look-around';
-                if (game.player.cameras.active == game.player.cameras.collect){
-                    game.activeCamera = game.player.cameras.back;
-                    game.toggleBriefcase();
-                }
-			})
-			object.castShadow = true;
-			
-			game.player.mixer = object.mixer;
-			game.player.root = object.mixer.getRoot();
-			
-			object.name = "Character";
-					
-			object.traverse( function ( child ) {
-				if ( child.isMesh ) {
-					child.castShadow = true;
-					child.receiveShadow = true;		
-				}
-			} );
-			
-			game.scene.add(object);
-			game.player.object = object;
-			game.player.walk = object.animations[0];
-			
-			game.joystick = new JoyStick({
-				onMove: game.playerControl,
-				game: game
-			});
-			
-			game.createCameras();
-			game.loadEnvironment(loader);
-		//console.log('loader object loaded')
-		}, null, this.onError );
+		
 
 		
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -319,9 +282,32 @@ export default class RPG{
 			
 		this.container.addEventListener( 'resize', function(){ game.onWindowResize(); }, false );
 
+		//create pc
+		//createCameras
+		//loadEnvironment
+		//loadUSB
+		//load animations
+		//lift curtain on scene
+
 
 		
-		this.initSfx();
+		return game.loadEnvironment(loader)
+			.then(() => Promise.all(game.engine.at(game.place.id).map(game.loadScentityPromise(loader))))
+			.then(() => {
+				game.createCameras();
+				this.initSfx();
+				game.action = "look-around";
+				game.initPlayerPosition(this.player.coords);
+				game.mode = game.modes.ACTIVE;
+				const overlay = document.getElementById("overlay");
+				overlay.classList.add("fade-in");
+				overlay.addEventListener("animationend", function(evt){
+					evt.target.style.display = 'none';
+				}, false);
+			})
+			.then(() => this.animate())
+			.catch(this.onError)
+		
 	}
 
     loadUSB(loader){
@@ -348,55 +334,197 @@ export default class RPG{
 			game.loadNextAnim(loader);
 		}, null, this.onError );
 	}
+
+	loadScentityPromise(loader){
+		const kinematic = this.loadStaticScentityPromise(loader)
+		const dynamic = this.loadAnimScentityPromise(loader)
+		return scentity => _.get(scentity, 'assets.animations') ? dynamic(scentity) : kinematic(scentity)
+	}
+
+
+    loadStaticScentityPromise(loader){
+		const game = this;
+		return scentity => {
+			//console.dir('rpg loadStaticScentityPromise', scentity)
+			return new Promise((resolve, reject) => {
+				//resolce true if scentity not located in this place
+				const scentityPos = _.get(scentity, `located.${game.place.reference}`)
+
+				if(!game.place) throw new Error('rpg display place not set at scentity load')
+				if(!scentityPos) throw new Error('scentity not located at display place')
+				if(!scentityPos.length) throw new Error('scentity missing position')
+				if(_.get(scentity, 'assets.addition.assetType') !== 'fbx') throw new Error('invalid scentity assetType')
+
+				loader.load( `${this.assetsPath}${_.get(scentity, 'assets.addition.assetName')}.${_.get(scentity, 'assets.addition.assetType')}`, function ( object ) {
+					game.scene.add(object);
+					
+		            const scale = scentity.scaleFactor * Math.pow(10, game.place.scale - scentity.scale + 1);
+					object.scale.set(scale, scale, scale);
+					object.name = scentity.name;
+		            object.position.set(...scentityPos);
+		            object.castShadow = true;
+
+		            object.scentity = scentity
+					
+		            if(scentity.assets.collect) game.collect.push(object)
+					
+					object.traverse( function ( child ) {
+						if ( child.isMesh ) {
+		                    child.castShadow = true;
+		                    child.receiveShadow = true;
+						}
+					} );
+					
+					resolve(object)
+				}, null, reject );
+			})
+				//.then(() => game.loadNextAnim(loader))
+				.catch(game.onError)
+		}
+	}
+    
+    loadAnimScentityPromise(loader){
+		const game = this;
+		return scentity => {
+			//console.dir('rpg loadAnimScentityPromise', scentity)
+
+			return new Promise((resolve, reject) => {
+				//resolce true if scentity not located in this place
+				const scentityPos = _.get(scentity, `located.${game.place.reference}`)
+
+				if(!game.place) throw new Error('rpg display place not set at scentity load')
+				if(!scentityPos) throw new Error('scentity not located at display place')
+				if(!scentityPos.length) throw new Error('scentity missing position')
+				if(_.get(scentity, 'assets.addition.assetType') !== 'fbx') throw new Error('invalid scentity assetType')
+
+				loader.load( `${this.assetsPath}${_.get(scentity, 'assets.addition.assetName')}.${_.get(scentity, 'assets.addition.assetType')}`, function ( object ) {
+
+					object.mixer = new THREE.AnimationMixer( object );
+					object.mixer.addEventListener('finished', function(e){
+						game.action = 'look-around';
+		                if (game.player.cameras.active == game.player.cameras.collect){
+		                    game.activeCamera = game.player.cameras.back;
+		                    game.toggleBriefcase();
+		                }
+					})
+					object.castShadow = true;
+					
+					game.player.mixer = object.mixer;
+					game.player.root = object.mixer.getRoot();
+					game.player.object = object;
+					game.player.walk = object.animations[0];
+					game.player.coords = scentityPos
+					/*
+					_.forEach(scentity.assets.animations.assetNames, anim => {
+						console.dir('RPG loadAnimScentityPromise anim', anim)
+						loader.load( `${game.assetsPath}${anim}.${scentity.assets.animations.assetType}`, function( animObj ){
+							game.player[anim] = animObj.animations[0];
+							if (anim=='push-button'){
+								game.player[anim].loop = false;
+							}
+						})
+					})
+					*/
+					object.traverse( function ( child ) {
+						if ( child.isMesh ) {
+							child.castShadow = true;
+							child.receiveShadow = true;		
+						}
+					} );
+					
+					game.scene.add(object);
+					
+					game.joystick = new JoyStick({
+						onMove: game.playerControl,
+						game: game
+					});
+			
+					
+		            const scale = scentity.scaleFactor * Math.pow(10, game.place.scale - scentity.scale + 1);
+					object.scale.set(scale, scale, scale);
+					object.name = scentity.name;
+		            object.position.set(...scentityPos);
+		            object.castShadow = true;
+
+		            object.scentity = scentity
+					
+		            if(scentity.assets.collect) game.collect.push(object)
+					
+					object.traverse( function ( child ) {
+						if ( child.isMesh ) {
+		                    child.castShadow = true;
+		                    child.receiveShadow = true;
+						}
+					} );
+					
+					resolve(scentity.assets.animations.assetNames)
+				}, null, reject );
+			})
+				.then(anims => Promise.all(anims.map(anim => {
+					return new Promise((resolve, reject) => {
+						loader.load( `${game.assetsPath}${anim}.${scentity.assets.animations.assetType}`, function( animObj ){
+							//console.dir('RPG loadAnimScentityPromise anim', anim, animObj)
+							game.player[anim] = animObj.animations[0];
+							if (anim=='push-button'){
+								game.player[anim].loop = false;
+							}
+							resolve(true)
+						})
+					})
+				})))
+				.catch(game.onError)
+		}
+	}
     
 	loadEnvironment(loader){
 		const game = this;
-		
-		loader.load( `${this.assetsPath}environment.fbx`, function ( object ) {
-			game.scene.add(object);
-			game.doors = [];
-			game.fans = [];
-			
-			object.receiveShadow = true;
-			object.scale.set(0.8, 0.8, 0.8);
-			object.name = "Environment";
-			let door = { trigger:null, proxy:[], doors:[]};
-			
-			object.traverse( function ( child ) {
-				if ( child.isMesh ) {
-					if (child.name.includes('main')){
-						child.castShadow = true;
-						child.receiveShadow = true;
-					}else if (child.name.includes('mentproxy')){
-						child.material.visible = false;
-						game.environmentProxy = child;
-					}else if (child.name.includes('door-proxy')){
-						child.material.visible = false;
-						door.proxy.push(child);
-						checkDoor();
- 					}else if (child.name.includes('door')){
-						door.doors.push(child);
-						checkDoor()
-					}else if (child.name.includes('fan')){
-						game.fans.push(child);
-					}
-				}else{
-					if (child.name.includes('Door-null')){
-						door.trigger = child;
-						checkDoor();
-					}
-				}
+		return new Promise((resolve, reject) => {
+			loader.load( `${this.assetsPath}environment.fbx`, function ( object ) {
+				game.scene.add(object);
+				game.doors = [];
+				game.fans = [];
 				
-				function checkDoor(){
-					if (door.trigger!==null && door.proxy.length==2 && door.doors.length==2){
-						game.doors.push(Object.assign({}, door));
-						door = { trigger:null, proxy:[], doors:[]};
+				object.receiveShadow = true;
+				object.scale.set(0.8, 0.8, 0.8);
+				object.name = "Environment";
+				let door = { trigger:null, proxy:[], doors:[]};
+				
+				object.traverse( function ( child ) {
+					if ( child.isMesh ) {
+						if (child.name.includes('main')){
+							child.castShadow = true;
+							child.receiveShadow = true;
+						}else if (child.name.includes('mentproxy')){
+							child.material.visible = false;
+							game.environmentProxy = child;
+						}else if (child.name.includes('door-proxy')){
+							child.material.visible = false;
+							door.proxy.push(child);
+							checkDoor();
+	 					}else if (child.name.includes('door')){
+							door.doors.push(child);
+							checkDoor()
+						}else if (child.name.includes('fan')){
+							game.fans.push(child);
+						}
+					}else{
+						if (child.name.includes('Door-null')){
+							door.trigger = child;
+							checkDoor();
+						}
 					}
-				}
-			} );
-			
-			game.loadUSB(loader);
-		}, null, this.onError );
+					
+					function checkDoor(){
+						if (door.trigger!==null && door.proxy.length==2 && door.doors.length==2){
+							game.doors.push(Object.assign({}, door));
+							door = { trigger:null, proxy:[], doors:[]};
+						}
+					}
+				} );
+				resolve(object)
+			}, null, reject )
+		})
+			.catch(game.onError)
 	}
 	
 	createDummyEnvironment(){
@@ -490,8 +618,9 @@ export default class RPG{
 		}, null, this.onError);	
 	}
 	
-	initPlayerPosition(){
+	initPlayerPosition(coords = [0, 0, 0]){
 		//cast down
+        this.player.object.position.set(...coords);
 		const dir = new THREE.Vector3(0,-1,0);
 		const pos = this.player.object.position.clone();
 		pos.y += 200;
@@ -694,10 +823,11 @@ export default class RPG{
 		}
         
         if (this.collect !== undefined && !trigger){
-            this.collect.forEach(function(object){
+            this.collect.filter(o => _.get(o, 'assets.collect.assetName')).forEach(function(object){
+            	if(!_.get(object, 'assets.collect.assetName')) game.onError('collected assets not defined')
 				if (object.visible && game.player.object.position.distanceTo(object.position)<100){
 					game.actionBtn.style = 'display:block;';
-					game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}usb.jpg` };
+					game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}${_.get(object, 'assets.collect.assetName')}.${_.get(object, 'assets.collect.assetType')}` };
 					trigger = true;
 				}
 			});

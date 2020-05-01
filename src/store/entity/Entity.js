@@ -36,6 +36,10 @@ function Entity (id, opts = {}) {
 		current: () => _.flatMap(this.senses, s => s.placeIds(this.place)),
 		all: () => []
 	}
+	this.located = opts.located
+	this.assets = opts.assets
+	this.maxLocationScale = opts.maxLocationScale ? opts.maxLocationScale : this.scale - 1
+	this.scaleFactor = opts.scaleFactor ? opts.scaleFactor : 1
 	//console.dir('Entity construction ends')
 }
 Entity.prototype = Object.create(Store.prototype)

@@ -16,6 +16,11 @@ function Human (Divine, startPlace) {
 	Divine.call(this, undefined, _.set(human, 'startPlace', startPlace))
 	//console.dir('Human scenario', this)
 }
+
+function USB (Entity, startPlace) {
+	Entity.call(this, undefined, _.set(usb, 'startPlace', startPlace))
+	//console.dir('USB scenario', this)
+}
 /*
 function Savanna (Place, parentPlace) {
 	const allowedParentScales = _.isArray(savanna.scales) ? savanna.scales.map(x => x - 1) : [savanna.scale - 1]
@@ -33,12 +38,12 @@ export function scenario (seed) {
 		type: 'Selector',
 		value: 'Factorial',
 		assetFiles: {
-			anims: ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"],
+			//anims: ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"],
 			sfx: ['gliss', 'button', 'door', 'fan', ...factory.profiles.filter(p => p[0] === 'mechanical' && p[1].radiation.assetType === 'sfx').map(p => p[1].radiation.assetName)],
-			entities: ['girl-walk', 'usb'],
+			//entities: ['girl-walk', 'usb'],
 			places: ['environment']
 		},
-		starterFunc: function({Divine, createPlaces, universe}) {
+		starterFunc: function({Divine, Entity, createPlaces, universe}) {
 			const starterPlaces = {
 				baseId: universe.id, 
 				templates: places,
@@ -48,7 +53,8 @@ export function scenario (seed) {
 
 				const firstPlace = createPlaces(starterPlaces)[0]
 				const first = new Human(Divine, firstPlace)
-				return [ first ]
+				const firstStatic = new USB(Entity, firstPlace)
+				return [ first, firstStatic ]
 			} catch (err) {
 				console.error(err)
 			}

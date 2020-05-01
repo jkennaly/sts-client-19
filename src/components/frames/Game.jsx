@@ -14,6 +14,7 @@ import TextEntryModal from '../modals/TextEntryModal.jsx';
 
 import {Game as GameCon} from '../../store/entity/diffuse/Game'
 import Divine from '../../store/entity/discrete/Divine'
+import Entity from '../../store/entity/Entity'
 import Place from '../../store/entity/place/Place'
 
 
@@ -57,6 +58,7 @@ const Game = {
 		player1 = getPlayer(undefined, universe)
 		starters = game.scenario.starterFunc({
 			Divine: Divine, 
+			Entity: Entity,
 			createPlaces: createPlaces, 
 			getPlace: getPlace, 
 			universe: universe
