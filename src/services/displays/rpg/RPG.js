@@ -823,11 +823,11 @@ export default class RPG{
 		}
         
         if (this.collect !== undefined && !trigger){
-            this.collect.filter(o => _.get(o, 'assets.collect.assetName')).forEach(function(object){
-            	if(!_.get(object, 'assets.collect.assetName')) game.onError('collected assets not defined')
+            this.collect.filter(o => _.get(o, 'scentity.assets.collect.assetName')).forEach(function(object){
+            	if(!_.get(object, 'scentity.assets.collect.assetName')) game.onError('collected assets not defined')
 				if (object.visible && game.player.object.position.distanceTo(object.position)<100){
 					game.actionBtn.style = 'display:block;';
-					game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}${_.get(object, 'assets.collect.assetName')}.${_.get(object, 'assets.collect.assetType')}` };
+					game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}${_.get(object, 'scentity.assets.collect.assetName')}.${_.get(object, 'scentity.assets.collect.assetType')}` };
 					trigger = true;
 				}
 			});
