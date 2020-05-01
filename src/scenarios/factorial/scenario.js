@@ -9,6 +9,8 @@ import ground from './entity/diffuse/ground.json'
 import human from './entity/discrete/divine/human.json'
 import usb from './entity/discrete/inanimate/usb.json'
 
+
+
 import places from './entity/place/places.json'
 import factory from './entity/place/factory.json'
 
@@ -41,9 +43,9 @@ export function scenario (seed) {
 			//anims: ["ascend-stairs", "gather-objects", "look-around", "push-button", "run"],
 			sfx: ['gliss', 'button', 'door', 'fan', ...factory.profiles.filter(p => p[0] === 'mechanical' && p[1].radiation.assetType === 'sfx').map(p => p[1].radiation.assetName)],
 			//entities: ['girl-walk', 'usb'],
-			places: ['environment']
+			//places: ['environment']
 		},
-		starterFunc: function({Divine, Entity, createPlaces, universe}) {
+		starterFunc: function({Entity, ActionClass, createPlaces, universe}) {
 			const starterPlaces = {
 				baseId: universe.id, 
 				templates: places,
@@ -52,7 +54,7 @@ export function scenario (seed) {
 			try {
 
 				const firstPlace = createPlaces(starterPlaces)[0]
-				const first = new Human(Divine, firstPlace)
+				const first = new Human(Entity, firstPlace)
 				const firstStatic = new USB(Entity, firstPlace)
 				return [ first, firstStatic ]
 			} catch (err) {

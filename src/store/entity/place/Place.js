@@ -31,6 +31,8 @@ function Place(parentPlace, connections = [], template = {}) {
 	const baseValues = this.scale === 1 ? initialValues(parentPlace) : derivativeValues(parentPlace)
 	//execute each connection function to modify values as needed by existing places
 	this.placeValues = connections.reduce((pv, cv) => cv(pv), baseValues)
+	this.located = template.located
+	this.assets = template.assets
 
 
 }

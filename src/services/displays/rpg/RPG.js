@@ -291,7 +291,7 @@ export default class RPG{
 
 
 		
-		return game.loadEnvironment(loader)
+		return game.loadEnvironment(loader)(game.place)
 			.then(() => Promise.all(game.engine.at(game.place.id).map(game.loadScentityPromise(loader))))
 			.then(() => {
 				game.createCameras();
@@ -308,31 +308,6 @@ export default class RPG{
 			.then(() => this.animate())
 			.catch(this.onError)
 		
-	}
-
-    loadUSB(loader){
-		const game = this;
-		
-		loader.load( `${this.assetsPath}usb.fbx`, function ( object ) {
-			game.scene.add(object);
-			
-            const scale = 0.2;
-			object.scale.set(scale, scale, scale);
-			object.name = "usb";
-            object.position.set(-416, 0.8, -472);
-            object.castShadow = true;
-			
-            game.collect.push(object);
-			
-			object.traverse( function ( child ) {
-				if ( child.isMesh ) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-				}
-			} );
-			
-			game.loadNextAnim(loader);
-		}, null, this.onError );
 	}
 
 	loadScentityPromise(loader){
@@ -478,8 +453,15 @@ export default class RPG{
     
 	loadEnvironment(loader){
 		const game = this;
-		return new Promise((resolve, reject) => {
-			loader.load( `${this.assetsPath}environment.fbx`, function ( object ) {
+		return scentity => {
+			//console.dir('rpg loadEnvironment', scentity)
+
+			return new Promise((resolve, reject) => {
+				if(_.get(scentity, 'assets.addition.assetType') !== 'fbx') throw new Error('invalid scentity assetType')
+
+				loader.load( `${this.assetsPath}${_.get(scentity, 'assets.addition.assetName')}.${_.get(scentity, 'assets.addition.assetType')}`, function ( object ) {
+
+
 				game.scene.add(object);
 				game.doors = [];
 				game.fans = [];
@@ -525,7 +507,7 @@ export default class RPG{
 			}, null, reject )
 		})
 			.catch(game.onError)
-	}
+	}}
 	
 	createDummyEnvironment(){
 		const env = new THREE.Group();

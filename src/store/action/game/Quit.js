@@ -1,5 +1,5 @@
 // Quit.js
-// store/action/player
+// store/action/game
 
 
 import m from 'mithril'

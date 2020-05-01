@@ -12,5 +12,11 @@
 	"defaultSubBiome": "floor",
 	"defaultSubHole": "air",
 	"biome": "industrial",
-	"reference": "factorial-factory"
+	"reference": "factorial-factory",
+	"assets": {
+		"addition": {
+			"assetType": "fbx",
+			"assetName": "environment"
+		}
+	}
 }
