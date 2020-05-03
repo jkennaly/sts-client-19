@@ -11,7 +11,8 @@ import Effect from '../Effect.js'
 function Relocate (id, opts = {}) {
 	if(!opts.newPlace) throw new Error('No Place to relocate to')
 	Effect.call(this, id, {
-		scale: opts.newPlace.scale
+		scale: opts.newPlace.scale,
+		instant: true
 	})
 	this.value = 'Relocate'
 	this.tag = 'Relocate Effect'
@@ -24,5 +25,8 @@ function Relocate (id, opts = {}) {
 
 Relocate.prototype = Object.create(Effect.prototype)
 
+/*
+
+*/
 
 export {Relocate}

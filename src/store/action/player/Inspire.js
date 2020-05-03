@@ -22,6 +22,13 @@ function Inspire (id, opts = {}) {
 		energy: 0
 	}
 
+	this.action = ActionClass.prototype.actionFactory.call(this, {
+		sourceEffect: 'LinkPlayer',
+		targetEffect: 'LinkAvatar',
+		sourceConnectionName: 'avatarId',
+		targetConnectionName: 'playerId'
+	})
+
 
 
 	//prepare activation energy
@@ -41,6 +48,8 @@ Inspire.prototype.effectInterlock = function(effects) {
 	return effects.some(e => e.value === 'Avatar')
 }
 
+/*
+
 Inspire.prototype.action = function (engine) { return targetId => {
 	this.effects = {
 		source: new this.effects.LinkPlayer(undefined, {avatarId: targetId}),
@@ -49,5 +58,7 @@ Inspire.prototype.action = function (engine) { return targetId => {
 	engine.queue.add([{action: this, targetIds: [targetId]}])
 	
 }}
+
+*/
 
 export default Inspire

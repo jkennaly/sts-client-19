@@ -1,0 +1,20 @@
+{
+	"value": "Collect",
+	"type": "ShortText",
+	"tag": "Relocate Entity",
+	"name": "collect",
+	"scale": 9,
+	"forces": {
+		"mechanical": 1
+	},
+	"effective": false,
+	"activation": {
+		"energy": 0
+	},
+	"actionEffects": {
+		"sourceEffect": "Nothing",
+		"targetEffect": "Nothing",
+		"sourceConnectionName": "mover",
+		"targetConnectionName": "relocated"
+	}
+}

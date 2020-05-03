@@ -168,13 +168,13 @@ export default class RPG{
 					this.tweens.push( new Tween(right.position, "z", right.position.z + 240, 2, function(){
 						game.tweens.splice(game.tweens.indexOf(this), 1);
 						delete game.cameraTarget; 
-						const door = game.doors[this.onAction.index];
+						const door = game.doors[game.onAction.index];
 						const left = door.doors[0];
 						const right = door.doors[1];
 						const leftProxy = door.proxy[0];
 						const rightProxy = door.proxy[1];
-						leftProxy.position = left.position.clone();
-						rightProxy.position = right.position.clone();
+						leftProxy.position.set(left.position.x, left.position.y, left.position.z)
+						rightProxy.position.set(right.position.x, right.position.y, right.position.z)
 					}))
 					break;
                 case 'collect':

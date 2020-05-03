@@ -10,6 +10,7 @@ import Store from '../../Store'
 
 function Effect (id, opts = {}) {
 	Store.call(this, id, opts)
+	this.instant = opts.instant || false
 }
 Effect.prototype = Object.create(Store.prototype)
 
