@@ -31,6 +31,7 @@ export default class RPG{
 		this.mode = this.modes.NONE;
 		
 		this.container;
+		this.serial = 1
 		this.player = { };
 		this.stats;
 		this.controls;
@@ -46,7 +47,6 @@ export default class RPG{
 		this.debugPhysics = false;
 		this.cameraFade = 0.05;
         this.mute = false;
-        this.collect = [];
 		
 		this.messages = { 
 			text:[ 
@@ -127,17 +127,23 @@ export default class RPG{
         this.mute = !this.mute;
         const btn = document.getElementById('sfx-btn');
         
-        if (this.mute){
-            for(let prop in this.sfx){
-                let sfx = this.sfx[prop];
-                if (sfx instanceof SFX) sfx.stop();
-            }
-            btn.innerHTML = '<i class="fas fa-volume-off"></i>';
-        }else{
+        if (this.mute) this.stopSound()
+        else{
             this.sfx.factory.play
             this.sfx.fan.play();
             btn.innerHTML = '<i class="fas fa-volume-up"></i>';
         }
+    }
+    
+    stopSound(){
+        this.mute = true
+        const btn = document.getElementById('sfx-btn');
+        
+        for(let prop in this.sfx){
+            let sfx = this.sfx[prop];
+            if (sfx instanceof SFX) sfx.stop();
+        }
+        btn.innerHTML = '<i class="fas fa-volume-off"></i>';
     }
     
 	contextAction(){
@@ -179,11 +185,27 @@ export default class RPG{
 					break;
                 case 'collect':
                     this.activeCamera = this.player.cameras.collect;
-                    this.collect[this.onAction.index].visible = false;
-                    if (this.collected==undefined) this.collected = [];
-                    this.collected.push(this.onAction.index);
+                    //this.collect[this.onAction.index].visible = false;
+                    //if (this.collected==undefined) this.collected = [];
+                    //this.collected.push(this.onAction.index);
                     document.getElementById("briefcase").children[0].children[0].children[this.onAction.index].children[0].src = this.onAction.src;
-                    
+		          	this.scene.children
+		          		.filter(c => _.get(c, 'scentity.id') !== this.sensor.id)
+		          		.filter(c => _.get(c, 'scentity.assets.collect.assetName'))
+		          		.filter(c => c.visible)
+		          		.filter(c => this.player.object.position.distanceTo(c.position)<100)
+						.forEach(object => object.visible = false)
+				//get engine update action
+				const collect = this.sensor.displayActions.find(a => a.value === 'Collect').action(engine)
+				this.engine.at(this.place.id)
+		            .filter(e => e.id !== this.sensor.id)
+		            .filter(o => _.get(o, 'assets.collect.assetName'))
+		            .forEach(c => collect(c.id, {
+						newPlace: this.sensor.id,
+						display: this.place.id,
+						serial: ++this.serial
+					}))
+			
                     break;
 			}
 		}
@@ -341,7 +363,7 @@ export default class RPG{
 
 		            object.scentity = scentity
 					
-		            if(scentity.assets.collect) game.collect.push(object)
+		            //if(scentity.assets.collect) game.collect.push(object)
 					
 					object.traverse( function ( child ) {
 						if ( child.isMesh ) {
@@ -353,7 +375,6 @@ export default class RPG{
 					resolve(object)
 				}, null, reject );
 			})
-				//.then(() => game.loadNextAnim(loader))
 				.catch(game.onError)
 		}
 	}
@@ -365,7 +386,9 @@ export default class RPG{
 
 			return new Promise((resolve, reject) => {
 				//resolce true if scentity not located in this place
-				const scentityPos = _.get(scentity, `located.${game.place.reference}`)
+				const scentityInitPos = _.get(scentity, `located.${game.place.reference}`)
+				const scentityRePos = _.get(scentity.effects.find(e => _.get(e, `newPosition.${game.place.reference}`)), `newPosition.${game.place.reference}`, [])
+				const scentityPos = scentityRePos.length ? scentityRePos : scentityInitPos
 
 				if(!game.place) throw new Error('rpg display place not set at scentity load')
 				if(!scentityPos) throw new Error('scentity not located at display place')
@@ -575,31 +598,6 @@ export default class RPG{
 		}, 2000)
 	}
 	
-	loadNextAnim(loader){
-		let anim = this.anims.pop();
-		//console.log('loadNextAnim', anim)
-		const game = this;
-		loader.load( `${this.assetsPath}${anim}.fbx`, function( object ){
-			game.player[anim] = object.animations[0];
-			if (anim=='push-button'){
-				game.player[anim].loop = false;
-			}
-			if (game.anims.length>0){
-				game.loadNextAnim(loader);
-			}else{
-				delete game.anims;
-				game.action = "look-around";
-				game.initPlayerPosition();
-				game.mode = game.modes.ACTIVE;
-				const overlay = document.getElementById("overlay");
-    			overlay.classList.add("fade-in");
-				overlay.addEventListener("animationend", function(evt){
-					evt.target.style.display = 'none';
-				}, false);
-			}
-		}, null, this.onError);	
-	}
-	
 	initPlayerPosition(coords = [0, 0, 0]){
 		//cast down
         this.player.object.position.set(...coords);
@@ -753,6 +751,15 @@ export default class RPG{
 				}
 			}
 		}
+		//get engine update action
+		const move = engine.gameState().player1.displayActions.find(a => a.value === 'Move').action(engine)
+		const finalCoords = [this.player.object.position.x, this.player.object.position.y, this.player.object.position.z]
+		move(this.sensor.id, {
+			reference: this.place.reference,
+			coords: finalCoords,
+			display: this.place.id,
+			serial: ++this.serial
+		})
 	}
 	
 	animate() {
@@ -804,15 +811,22 @@ export default class RPG{
 			});
 		}
         
-        if (this.collect !== undefined && !trigger){
-            this.collect.filter(o => _.get(o, 'scentity.assets.collect.assetName')).forEach(function(object){
-            	if(!_.get(object, 'scentity.assets.collect.assetName')) game.onError('collected assets not defined')
-				if (object.visible && game.player.object.position.distanceTo(object.position)<100){
-					game.actionBtn.style = 'display:block;';
-					game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}${_.get(object, 'scentity.assets.collect.assetName')}.${_.get(object, 'scentity.assets.collect.assetType')}` };
-					trigger = true;
-				}
-			});
+        const collectibles = this.engine.at(this.place.id)
+            .filter(e => e.id !== this.sensor.id)
+            .filter(o => _.get(o, 'assets.collect.assetName'))
+        if (collectibles.length && !trigger){
+            collectibles
+            	.map(scentity => this.scene.children.find(c => scentity.id === _.get(c, 'scentity.id', -1)))
+            	.filter(_.isObject)
+	            .forEach(function(object){
+	            	if(!_.get(object, 'scentity.assets.collect.assetName')) game.onError('collected assets not defined')
+					if (object.visible && game.player.object.position.distanceTo(object.position)<100){
+						game.actionBtn.style = 'display:block;';
+						game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}${_.get(object, 'scentity.assets.collect.assetName')}.${_.get(object, 'scentity.assets.collect.assetType')}` };
+						trigger = true;
+					}
+				});
+
         }
 		
 		if (!trigger) delete this.onAction;

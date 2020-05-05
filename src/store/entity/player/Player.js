@@ -8,6 +8,7 @@ import localforage from 'localforage'
 
 import Entity from '../Entity'
 import Inspire from '../../action/player/Inspire'
+import Move from '../../action/display/Move'
 import Divine from '../../sense/forces/Divine'
 
 //a player can be:
@@ -23,6 +24,7 @@ function Player (id, opts = {}) {
 	this.tag = 'Player'
 	this.name = 'player'
 	this.actions.push(new Inspire(undefined, {source: this.id}))
+	this.displayActions.push(new Move(undefined, {source: this.id}))
 	this.senses.push(new Divine())
 	this.defaultSense = 'Divine'
 	//players perceive controllable entities

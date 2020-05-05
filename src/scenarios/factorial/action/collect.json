@@ -13,7 +13,7 @@
 	},
 	"actionEffects": {
 		"sourceEffect": "Nothing",
-		"targetEffect": "Nothing",
+		"targetEffect": "Relocate",
 		"sourceConnectionName": "mover",
 		"targetConnectionName": "relocated"
 	}

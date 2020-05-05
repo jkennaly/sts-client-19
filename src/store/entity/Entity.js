@@ -40,6 +40,7 @@ function Entity (id, opts = {}) {
 	Store.call(this, id, opts)
 	//console.dir('Store.called')
 	this.actions = []
+	this.displayActions = []
 	this.effects = []
 	this.place = opts.startPlace
 	this.energy = {

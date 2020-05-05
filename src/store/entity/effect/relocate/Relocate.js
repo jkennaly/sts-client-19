@@ -19,6 +19,8 @@ function Relocate (id, opts = {}) {
 	this.name = 'relocate'
 
 	this.newPlace = opts.newPlace
+	this.display = opts.display
+	this.serial = opts.serial
 
 
 }

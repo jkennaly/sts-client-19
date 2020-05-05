@@ -18,11 +18,27 @@ import factory from './entity/place/factory.json'
 
 function Collect (ActionClass, opts) {
 	ActionClass.call(this, undefined, _.assign({}, collect, opts))
+
+	this.action = ActionClass.prototype.actionFactory.call(this, {
+		sourceEffect: 'Nothing',
+		targetEffect: 'Relocate',
+		sourceConnectionName: 'collected',
+		targetConnectionName: 'collector'
+		/*
+		targetValue: {
+			reference: opts.reference,
+			coords: opts.coords,
+			display: opts.display,
+			serial: ++serial
+		}
+		*/
+	})
 	
 }
-function Human (Entity, startPlace, ActionClass, Actions) {
+function Human (Entity, startPlace, ActionClass, Actions, DisplayActions) {
 	Entity.call(this, undefined, _.set(human, 'startPlace', startPlace))
 	this.actions = Actions.map(Action => new Action(ActionClass, {source: this.id}))
+	this.displayActions = DisplayActions.map(Action => new Action(ActionClass, {source: this.id}))
 	//console.dir('Human scenario', this)
 }
 
@@ -67,7 +83,7 @@ export function scenario (seed) {
 			try {
 
 				const firstPlace = createPlaces(starterPlaces)[0]
-				const first = new Human(Entity, firstPlace, ActionClass, [Collect])
+				const first = new Human(Entity, firstPlace, ActionClass, [], [Collect])
 				const firstStatic = new USB(Entity, firstPlace)
 				return [ first, firstStatic ]
 			} catch (err) {

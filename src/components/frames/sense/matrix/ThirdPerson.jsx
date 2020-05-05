@@ -36,6 +36,7 @@ const ThirdPerson = {
                 <li><a href="#"><img></img></a></li>
             </ul>
         </div>
-	</div>
+	</div>,
+	onremove: () => rpg.stopSound()
 }
 export default ThirdPerson;

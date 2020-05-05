@@ -10,12 +10,18 @@ import Store from '../Store'
 import {Avatar} from '../entity/effect/links/Avatar'
 import {Player} from '../entity/effect/links/Player'
 import {Relocate} from '../entity/effect/relocate/Relocate'
+import {Reposition} from '../entity/effect/reposition/Reposition'
 import {Nothing} from '../entity/effect/nothing/Nothing'
 
 function ActionClass (id, opts = {}) {
 	Store.call(this, id, opts)
 	this.source = opts.source
 	this.effective = true
+	this.display = false
+
+	this.activation = {
+		energy: 0
+	}
 }
 ActionClass.prototype = Object.create(Store.prototype)
 
@@ -27,6 +33,7 @@ ActionClass.prototype.effects = {
 	LinkPlayer: Player,
 	LinkAvatar: Avatar,
 	Relocate: Relocate,
+	Reposition: Reposition,
 	Nothing: Nothing
 }
 
@@ -38,22 +45,26 @@ ActionClass.prototype.targetable = function(profile, effects, reqs = []) {
 }
 
 ActionClass.prototype.actionFactory = function (opts) {
-	return (engine) => targetId => {
-		const sourceEffect = opts.sourceEffect
-		if(!this.effects[sourceEffect]) throw new Error('Unknown Source Effect')
-		const targetEffect = opts.targetEffect
-		if(!this.effects[targetEffect]) throw new Error('Unknown Target Effect')
-		const sourceConnectionName = opts.sourceConnectionName
-		if(!sourceConnectionName) throw new Error('Unknown Source Connect Name')
-		const targetConnectionName = opts.targetConnectionName
-		if(!targetConnectionName) throw new Error('Unknown Target Connect Name')
-		let sourceOpts = {}
+	const sourceEffect = opts.sourceEffect
+	if(!this.effects[sourceEffect]) throw new Error('Unknown Source Effect')
+	const targetEffect = opts.targetEffect
+	if(!this.effects[targetEffect]) throw new Error('Unknown Target Effect')
+	const sourceConnectionName = opts.sourceConnectionName
+	if(!sourceConnectionName) throw new Error('Unknown Source Connect Name')
+	const targetConnectionName = opts.targetConnectionName
+	if(!targetConnectionName) throw new Error('Unknown Target Connect Name')
+
+	let sourceOpts = {}
+	let targetOpts = {}
+
+	const SourceEffect = this.effects[sourceEffect]
+	const TargetEffect = this.effects[targetEffect]
+	return (engine) => (targetId, targetValue) => {
 		sourceOpts[sourceConnectionName] = targetId
-		let targetOpts = {}
-		targetOpts[sourceConnectionName] = this.source.id
+		targetOpts[targetConnectionName] = this.source.id
 		this.effects = {
-			source: new this.effects[sourceEffect](undefined, sourceOpts),
-			target: new this.effects[targetEffect](undefined, targetOpts)
+			source: new SourceEffect(undefined, sourceOpts),
+			target: new TargetEffect(undefined, _.assign({}, targetOpts, (targetValue || {})))
 		}	
 		engine.queue.add([{action: this, targetIds: [targetId]}])
 	

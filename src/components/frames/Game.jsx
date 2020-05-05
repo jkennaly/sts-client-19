@@ -106,7 +106,7 @@ const Game = {
 				}}
 			/> : ''}
 			{game ? <Active 
-				cards={_.get(_.find(player1Cards(), c => c && selfFocusIds.some(f => f === c.id)), 'actions', [])} 
+				cards={_.get(_.find(player1Cards(), c => c && selfFocusIds.some(f => f === c.id)), 'actions', []).filter(c => !c.display)} 
 				focus={actionFocusIds}
 				action={actionCard => {
 					actionFocusIds = _.uniq([...actionFocusIds, actionCard.id])
@@ -161,7 +161,8 @@ const Game = {
 					hide={modalData.hide}
 				/>
 			 
-	    </div>
+	    </div>,
+	    onremove: () => engine.stop()
 
 }
 export default Game;

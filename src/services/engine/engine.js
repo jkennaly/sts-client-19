@@ -105,21 +105,29 @@ const start = (startObjects, notify, scenario) => {
 	localforage.setItem('gameState', JSON.stringify(gameState))
 	if(interval) clearInterval(interval)
 	interval = setInterval(nextTick, 1000, notify)
-	global.game = gameState
+	//global.gameInitState = gameState
 	//console.dir('engine start starters' , starters)
 	//console.dir(players)
 }
+
+const stop = () => clearInterval(interval)
+
 const sense = forces => {
 	if(!gameState) return []
 	return gameState.entities.filter(e => e.detectable(forces))
 
 }
+
 const engine = {
 	queue: queue,
 	start: start,
+	stop: stop,
 	sense: sense,
 	gameState: () => gameState,
-	at: placeId => gameState.entities.filter(e => e.place && (e.place.id === placeId))
+	at: placeId => gameState.entities.filter(e => {
+		return e.place && !e.effects.some(f => f.newPlace) && (e.place.id === placeId) || e.effects.length && e.effects.some(f => f.newPlace === placeId)
+	}),
+
 }
 window.engine = engine
 export default engine
