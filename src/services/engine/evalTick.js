@@ -64,16 +64,17 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 
 		//resolve effects to actor
 		source.energy.channel(energyRequired)
-		filterInPlace(source.effects, (e, i, arr) => !a.action.effects.source.instant || e.value !== a.action.effects.source.value)
-		source.effects.push(a.action.effects.source)
+		
+		source.effects = [...(source.effects.filter(
+				(e, i, arr) => !a.action.effects.source.instant || e.value !== a.action.effects.source.value)
+			), a.action.effects.source]
 		source.memory.push(JSON.stringify(a.action))
 		newState.entities[sourceIndex] = source
 		//resolve effects to targets
 		_.forEach(validTargets, t => {
 			const tIndex = newState.entities.findIndex(e => e.id === t.id)
-			filterInPlace(t.effects,
-				(e, i, arr) => !a.action.effects.target.instant || e.value !== a.action.effects.target.value)
-			t.effects.push(a.action.effects.target)
+			
+			t.effects = [...(t.effects.filter((e, i, arr) => !a.action.effects.target.instant || e.value !== a.action.effects.target.value)), a.action.effects.target]
 			t.memory.push(JSON.stringify(a.action.effects.target))
 			newState.entities[tIndex] = t
 			//console.dir('evalTick action execution target effects resolution', a.action.effects, t)

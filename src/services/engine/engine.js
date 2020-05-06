@@ -127,6 +127,11 @@ const engine = {
 	at: placeId => gameState.entities.filter(e => {
 		return e.place && !e.effects.some(f => f.newPlace) && (e.place.id === placeId) || e.effects.length && e.effects.some(f => f.newPlace === placeId)
 	}),
+	//getById works with string or array of stings
+	getById: idsRaw => {
+		const ids = _.isString(idsRaw) ? [idsRaw] : idsRaw
+		return gameState.entities.filter(e => ids.includes(e.id))
+	}
 
 }
 window.engine = engine

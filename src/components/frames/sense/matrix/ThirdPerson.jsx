@@ -31,9 +31,23 @@ const ThirdPerson = {
 		<button id="briefcase-btn"><i class="fas fa-briefcase"></i></button>
         <div id="briefcase">
             <ul>
-                <li><a href="#"><img></img></a></li>
-                <li><a href="#"><img></img></a></li>
-                <li><a href="#"><img></img></a></li>
+        {
+        	_.get(
+	        	attrs.engine.getById(attrs.sensor.id)[0], //sensor
+	        	'briefcase.contents',
+	        	[]
+        	)
+        	.concat([''])
+        	
+			.reduce((pv, cv, i, arr) => {
+					if((i + 1) > attrs.sensor.briefcase.slots) return pv
+				if((i + 1) < arr.length) return [...pv, cv]
+				//console.dir('ThirdPerson briefcase infill', attrs.sensor.briefcase.slots, arr.length)
+				return [...pv, cv, ...Array(attrs.sensor.briefcase.slots - arr.length).map(x => '')]
+			}, [])
+			.map(src => src ? <li><img src={src}></img></li> : <li><img></img></li>)
+
+	}
             </ul>
         </div>
 	</div>,

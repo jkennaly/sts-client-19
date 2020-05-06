@@ -9,6 +9,11 @@
 		"value": "Sight",
 		"scale": 6,
 		"places": {}
+	}],
+		["mechanical", {
+		"value": "Hearing",
+		"scale": 7,
+		"places": {}
 	}]
 	],
 	"defaultSense": "Sight",

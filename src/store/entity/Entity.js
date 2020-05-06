@@ -41,7 +41,19 @@ function Entity (id, opts = {}) {
 	//console.dir('Store.called')
 	this.actions = []
 	this.displayActions = []
-	this.effects = []
+	this.appliedEffects = []
+	Object.defineProperties(this, {
+        "effects": {
+            "get": function() {
+				const toolEffects = (_.isArray(this.tools) ? this.tools : [])
+					.flatMap(t => _.isArray(this.toolEffects) ? this.toolEffects : [])
+				return [...this.appliedEffects, ...toolEffects]
+			},
+		    "set": function(newEffects) {
+				this.appliedEffects = newEffects
+			}
+        }
+    })
 	this.place = opts.startPlace
 	this.energy = {
 		available: 0,
@@ -73,6 +85,7 @@ function Entity (id, opts = {}) {
 	this.profiles = (!_.isArray(opts.profiles) ? [] : opts.profiles)
 		.map(index(Profile))
 		.filter(_.isObject)
+	this.tool = false
 }
 Entity.prototype = Object.create(Store.prototype)
 

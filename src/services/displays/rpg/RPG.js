@@ -18,6 +18,8 @@ export default class RPG{
 		this.engine = engine
 		this.place = place
 		this.sensor = sensor
+		
+
 
 
 		this.modes = Object.freeze({
@@ -188,23 +190,26 @@ export default class RPG{
                     //this.collect[this.onAction.index].visible = false;
                     //if (this.collected==undefined) this.collected = [];
                     //this.collected.push(this.onAction.index);
-                    document.getElementById("briefcase").children[0].children[0].children[this.onAction.index].children[0].src = this.onAction.src;
+                    this.sensor.briefcase.add(this.onAction.src)
 		          	this.scene.children
 		          		.filter(c => _.get(c, 'scentity.id') !== this.sensor.id)
 		          		.filter(c => _.get(c, 'scentity.assets.collect.assetName'))
 		          		.filter(c => c.visible)
 		          		.filter(c => this.player.object.position.distanceTo(c.position)<100)
-						.forEach(object => object.visible = false)
-				//get engine update action
-				const collect = this.sensor.displayActions.find(a => a.value === 'Collect').action(engine)
-				this.engine.at(this.place.id)
-		            .filter(e => e.id !== this.sensor.id)
-		            .filter(o => _.get(o, 'assets.collect.assetName'))
-		            .forEach(c => collect(c.id, {
-						newPlace: this.sensor.id,
-						display: this.place.id,
-						serial: ++this.serial
-					}))
+						.forEach(object => {
+							object.visible = false
+
+						})
+					//get engine update action
+					const collect = this.sensor.displayActions.find(a => a.value === 'Collect').action(engine)
+					this.engine.at(this.place.id)
+			            .filter(e => e.id !== this.sensor.id)
+			            .filter(o => _.get(o, 'assets.collect.assetName'))
+			            .forEach(c => collect(c.id, {
+							newPlace: this.sensor.id,
+							display: this.place.id,
+							serial: ++this.serial
+						}))
 			
                     break;
 			}
@@ -330,6 +335,13 @@ export default class RPG{
 			.then(() => this.animate())
 			.catch(this.onError)
 		
+	}
+
+	updateBriefcase() {
+		const srcs = this.engine.getById(this.sensor.briefcase.contents)
+			.map(scentity => {
+				const src = `${game.assetsPath}${_.get(scentity, 'assets.collect.assetName')}.${_.get(scentity, 'assets.collect.assetType')}`
+			})
 	}
 
 	loadScentityPromise(loader){
@@ -811,7 +823,7 @@ export default class RPG{
 			});
 		}
         
-        const collectibles = this.engine.at(this.place.id)
+        const collectibles = (_.get(this.sensor, 'briefcase.contents.length', 0) >= _.get(this.sensor, 'briefcase.slots', 0) ? [] : this.engine.at(this.place.id))
             .filter(e => e.id !== this.sensor.id)
             .filter(o => _.get(o, 'assets.collect.assetName'))
         if (collectibles.length && !trigger){

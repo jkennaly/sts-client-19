@@ -39,7 +39,15 @@ function Human (Entity, startPlace, ActionClass, Actions, DisplayActions) {
 	Entity.call(this, undefined, _.set(human, 'startPlace', startPlace))
 	this.actions = Actions.map(Action => new Action(ActionClass, {source: this.id}))
 	this.displayActions = DisplayActions.map(Action => new Action(ActionClass, {source: this.id}))
-	//console.dir('Human scenario', this)
+	this.briefcase = {
+		slots: 3,
+		contents: [],
+		add: function(src) {
+			//console.dir('Human scenario briefcase add', src, this)
+			if(this.contents.length >= this.slots) return false
+			return this.contents.push(src)
+		}
+	}
 }
 
 function USB (Entity, startPlace) {
