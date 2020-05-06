@@ -8,12 +8,14 @@
 		["electrical", {
 		"value": "Sight",
 		"scale": 6,
-		"places": {}
+		"places": {},
+		"primary": true
 	}],
 		["mechanical", {
 		"value": "Hearing",
 		"scale": 7,
-		"places": {}
+		"places": {},
+		"primary": false
 	}]
 	],
 	"defaultSense": "Sight",
