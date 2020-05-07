@@ -11,7 +11,7 @@ import List from './matrix/List.jsx'
 import Voxel from './matrix/ThirdPerson.jsx'
 
 
-const clicked = ({senses: cards, focus, addFocus, removeFocus, setFocus}) => {
+const clicked = ({senses: cards, focus, addFocus, removeFocus, setFocus}, state) => {
 	////console.dir('Sense click setup', cards)
 	return clickedId => _.forEach(cards, card => {
 	//console.dir('Sense clicked', card, clickedId)
@@ -29,10 +29,14 @@ const clicked = ({senses: cards, focus, addFocus, removeFocus, setFocus}) => {
 		if(card.id === clickedId && !focus.some(f => f === card.id)) {
 			//console.dir('Sense clicked action secondary addFocus', clickedId, focus, card)
 			addFocus(card)
+			if(!state.playing) state.currentContext.resume()
+				state.playing = true
 		}
 		else if(card.id === clickedId) {
 			//console.dir('Sense clicked endAction secondary removeFocus', clickedId, focus, card)
 			removeFocus(card)
+			if(state.playing) state.currentContext.suspend()
+				state.playing = false
 		}
 	}
 
@@ -43,13 +47,17 @@ const Sense = (vnode) => {
 	let currentCardClick = clicked(vnode.attrs)
 	return {
 		oninit: ({attrs}) => currentCardClick = clicked(attrs),
-		onupdate: ({attrs}) => currentCardClick = clicked(attrs),
-		view: ({attrs}) => <div class="sts-frame-sense">
+		onupdate ({attrs}) {
+			currentCardClick = clicked(attrs, this)
+			//if there is a selectedSense that is not primary, enable sound, otherwise disable
+
+		},
+		view ({attrs}) { return <div class="sts-frame-sense">
 			<SenseBar 
 				clickFunction={currentCardClick} 
 				cards={attrs.senses} 
 				valid={attrs.validSenses} 
-					focus={attrs.focus}
+				focus={attrs.focus}
 			>
 				<h1>Sense</h1>
 			</SenseBar>
@@ -73,9 +81,17 @@ const Sense = (vnode) => {
 					scenario={attrs.scenario}
 					place={attrs.place}
 					sensor={attrs.sensor}
+					newContext={ctx => {
+
+						this.currentContext = ctx
+						const startLoud = attrs.selectedSenses.some(s => !s.primary)
+						this.playing = startLoud
+						if(!startLoud) this.currentContext.suspend()
+
+					}}
 				/> :
 				''
 			}
-		</div>
+		</div>}
 }}
 export default Sense;

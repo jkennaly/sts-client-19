@@ -12,7 +12,7 @@ import JoyStick from './libs/JoyStick'
 import Tween from './libs/Tween'
 
 export default class RPG{
-	constructor({container, scenario, engine, place, sensor}){
+	constructor({container, scenario, engine, place, sensor, context}){
 		if ( ! isWebGLSupported() ) throw new Error('WebGL Not supported');
 		window.rpg = this
 		this.engine = engine
@@ -49,6 +49,8 @@ export default class RPG{
 		this.debugPhysics = false;
 		this.cameraFade = 0.05;
         this.mute = false;
+		this.sfx = {};
+		this.sfx.context = context;
 		
 		this.messages = { 
 			text:[ 
@@ -232,8 +234,6 @@ export default class RPG{
 	}
 	
 	initSfx(){
-		this.sfx = {};
-		this.sfx.context = new (window.AudioContext || window.webkitAudioContext)();
 		const list = ['gliss','door','factory','button','fan'];
 		const game = this;
 		list.forEach(function(item){
@@ -294,7 +294,8 @@ export default class RPG{
 //		console.log('loading loader')
 		const loader = new FBXLoader();
 		//console.log('loader loaded')
-		const game = this;
+
+		//console.log('audio sfx', this.sfx)
 		
 		
 
@@ -318,14 +319,14 @@ export default class RPG{
 
 
 		
-		return game.loadEnvironment(loader)(game.place)
-			.then(() => Promise.all(game.engine.at(game.place.id).map(game.loadScentityPromise(loader))))
+		return this.loadEnvironment(loader)(this.place)
+			.then(() => Promise.all(this.engine.at(this.place.id).map(this.loadScentityPromise(loader))))
 			.then(() => {
-				game.createCameras();
+				this.createCameras();
 				this.initSfx();
-				game.action = "look-around";
-				game.initPlayerPosition(this.player.coords);
-				game.mode = game.modes.ACTIVE;
+				this.action = "look-around";
+				this.initPlayerPosition(this.player.coords);
+				this.mode = this.modes.ACTIVE;
 				const overlay = document.getElementById("overlay");
 				overlay.classList.add("fade-in");
 				overlay.addEventListener("animationend", function(evt){
@@ -335,13 +336,6 @@ export default class RPG{
 			.then(() => this.animate())
 			.catch(this.onError)
 		
-	}
-
-	updateBriefcase() {
-		const srcs = this.engine.getById(this.sensor.briefcase.contents)
-			.map(scentity => {
-				const src = `${game.assetsPath}${_.get(scentity, 'assets.collect.assetName')}.${_.get(scentity, 'assets.collect.assetType')}`
-			})
 	}
 
 	loadScentityPromise(loader){

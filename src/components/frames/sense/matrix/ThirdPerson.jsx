@@ -10,12 +10,16 @@ import RPG from '../../../../services/displays/rpg/RPG'
 
 const ThirdPerson = {
 	oncreate ({dom, attrs}) {
+		this.context = new window.AudioContext()
+		attrs.newContext(this.context)
+		//console.dir('this.context', this.context)
 		const rpg = new RPG({
 			container: dom,
 			scenario: attrs.scenario,
 			engine: attrs.engine,
 			place: attrs.place,
-			sensor: attrs.sensor
+			sensor: attrs.sensor,
+			context: this.context
 		})
 		window.rpg = rpg;//For debugging only
 	},
@@ -51,6 +55,6 @@ const ThirdPerson = {
             </ul>
         </div>
 	</div>,
-	onremove: () => rpg.stopSound()
+	onbeforeremove ()  {this.context.close()}
 }
 export default ThirdPerson;
