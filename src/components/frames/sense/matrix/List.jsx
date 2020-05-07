@@ -10,6 +10,9 @@ import Card from '../../../elements/cards/Card.jsx'
 const List = (vnode) => {
 	return {
 		view: ({attrs}) => <div>
+		{
+			//console.dir('List cards', attrs.cards)
+		}
 			{
 
 				attrs.cards

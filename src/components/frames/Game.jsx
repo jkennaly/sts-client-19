@@ -25,7 +25,7 @@ import {getAll as getSettings} from  '../../services/settings'
 import engine from  '../../services/engine/engine'
 
 
-let game, universe, player1, starters, senseCards, activeCards, avatar, activeAction
+let game, universe, player1, starters, activeCards, avatar, activeAction
 const player1Cards = () => {return {game:game, player:player1, avatar: avatar}}
 let modalData = {
 	prompt: '',
@@ -66,11 +66,9 @@ const Game = {
 			universe: universe
 		})
 		selfFocusIds = [player1.id]
-		senseCards = starters
 		activeCards = []
 		avatar = undefined
 		activeAction = undefined
-		senseCards = starters
 		engine.start([game, player1, ...starters], notify)
 	} catch (err) {
 		console.error(err)
@@ -85,7 +83,6 @@ const Game = {
 			//console.dir('Game oncreate')
 			//game = new GameCon()
 			//player1Cards = {game:game, player:player1}
-			//console.dir('Game senseCards', senseCards)
 		},
 		view: () => <div class="sts-frame-game">
 			{
@@ -122,7 +119,7 @@ const Game = {
 			{game ? <div class="sts-frame-main">
 				
 				<Sense 
-					cards={senseCards} 
+					cards={engine.gameState().entities} 
 					senses={
 						_.flatMap(player1Cards(), c => c ? c.senses : [])
 					}
@@ -139,6 +136,24 @@ const Game = {
 					action={c => {
 						senseFocusIds = _.uniq([...senseFocusIds, c.id])
 						//console.dir('Game.jsx sense action', senseFocusIds)
+
+					}}
+					setFocus={c => {
+						senseFocusIds = [c.id]
+						//m.redraw()
+						//console.dir('Game.jsx sense action', senseFocusIds)
+
+					}}
+					addFocus={c => {
+						senseFocusIds = _.uniq([...senseFocusIds, c.id])
+						//m.redraw()
+						//console.dir('Game.jsx sense action', senseFocusIds)
+
+					}}
+					removeFocus={c => {
+						senseFocusIds = senseFocusIds.filter(afi => afi !== c.id)
+						activeAction = undefined
+						//m.redraw()
 
 					}}
 					activeAction={activeAction}

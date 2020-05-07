@@ -7,7 +7,7 @@
 import _ from 'lodash'
 import seedrandom from 'seedrandom'
 
-import {scenario} from '../scenarios/earthican/scenario.js'
+//import {scenario} from '../scenarios/earthican/scenario.js'
 
 const scenarios = {};
 

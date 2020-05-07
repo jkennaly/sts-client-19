@@ -15,6 +15,7 @@ function Divine (id, opts = {}) {
 	this.value = 'Divine'
 	this.tag = 'Sense Divine Entities'
 	this.name = 'divine'
+	this.primary = true
 }
 
 Divine.prototype = Object.create(Sense.prototype)

@@ -11,6 +11,7 @@ import Store from '../Store'
 function Sense (id, opts = {}) {
 	Store.call(this, id, opts)
 	this.defaultView = 'list'
+	this.primary = opts.primary || false
 	this.placeIds = place => {
 		
 	}

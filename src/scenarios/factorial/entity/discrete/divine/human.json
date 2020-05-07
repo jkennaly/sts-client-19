@@ -14,8 +14,7 @@
 		["mechanical", {
 		"value": "Hearing",
 		"scale": 7,
-		"places": {},
-		"primary": false
+		"places": {}
 	}]
 	],
 	"defaultSense": "Sight",
