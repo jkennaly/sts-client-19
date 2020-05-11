@@ -125,12 +125,17 @@ const engine = {
 	sense: sense,
 	gameState: () => gameState,
 	at: placeId => gameState.entities.filter(e => {
-		return e.place && !e.effects.some(f => f.newPlace) && (e.place.id === placeId) || e.effects.length && e.effects.some(f => f.newPlace === placeId)
+		if(!e.place) return false
+
+		//console.dir('engine.at', e)
+		return !e.effects.some(f => f.newPlace) && (e.place === placeId) || e.effects.length && e.effects.some(f => f.newPlace === placeId)
 	}),
 	//getById works with string or array of stings
 	getById: idsRaw => {
+		if(!idsRaw) return undefined
 		const ids = _.isString(idsRaw) ? [idsRaw] : idsRaw
-		return gameState.entities.filter(e => ids.includes(e.id))
+		//console.dir('engine.getById', idsRaw, ids, gameState.entities.map(e => e.id))
+		return gameState.entities[_.isString(idsRaw) ? 'find' : 'filter'](e => ids.includes(e.id))
 	}
 
 }

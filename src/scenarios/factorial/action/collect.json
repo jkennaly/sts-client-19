@@ -16,5 +16,6 @@
 		"targetEffect": "Relocate",
 		"sourceConnectionName": "mover",
 		"targetConnectionName": "relocated"
-	}
+	},
+	"reference": "collect"
 }

@@ -20,7 +20,7 @@ import Place from '../../store/entity/place/Place'
 
 
 import {getOne as getPlayer} from  '../../services/vm/players'
-import {getOne as getPlace, registerGame, createSetpieces as createPlaces} from  '../../services/vm/places'
+import {getOne as getPlace, getAll as getPlaces, registerGame, createSetpieces as createPlaces} from  '../../services/vm/places'
 import {getAll as getSettings} from  '../../services/settings'
 import engine from  '../../services/engine/engine'
 
@@ -69,7 +69,7 @@ const Game = {
 		activeCards = []
 		avatar = undefined
 		activeAction = undefined
-		engine.start([game, player1, ...starters], notify)
+		engine.start([game, player1, ...starters, ...getPlaces()], notify)
 	} catch (err) {
 		console.error(err)
 		m.route.set('/launcher')
@@ -166,7 +166,7 @@ const Game = {
 					scenario={_.get(game, 'scenario')}
 					focus={senseFocusIds}
 					sensor={_.get(player1Cards(), 'avatar')}
-					place={_.get(_.get(player1Cards(), 'avatar'), 'place')}
+					place={engine.getById(_.get(_.get(player1Cards(), 'avatar'), 'place'))}
 				/>
 			</div> : ''}
 				<TextEntryModal 

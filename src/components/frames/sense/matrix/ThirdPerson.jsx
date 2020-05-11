@@ -37,7 +37,7 @@ const ThirdPerson = {
             <ul>
         {
         	_.get(
-	        	attrs.engine.getById(attrs.sensor.id)[0], //sensor
+	        	attrs.engine.getById(attrs.sensor.id), //sensor
 	        	'briefcase.contents',
 	        	[]
         	)

@@ -1,0 +1,55 @@
+[
+	{
+		"value": "Console 1",
+		"type": "ShortText",
+		"tag": "Console Node",
+		"name": "console",
+		"scale": 8,
+		"senses": [
+			["electrical", {
+				"value": "Power",
+				"scale": 9,
+				"places": {}
+			}]
+		],
+		"located": {
+			"factorial-factory": [-1134.6, 13.6, -390.8]
+		},
+		"maxLocationScale": 7,
+		"scaleFactor": 1,
+		"defaultSense": "Power",
+		"profiles": [
+			["electrical", {}], 
+			["mechanical", {}]
+		],
+		"assets": {
+			"addition": {
+				"assetType": "fbx",
+				"assetName": "usb"
+			},
+			"collect": {
+				"assetType": "jpg",
+				"assetName": "usb"
+			}
+		},
+		"records": {
+			"blockers": [],
+			"concepts": [],
+			"designs": [],
+			"techniques": []
+		},
+		"confers": [
+			{
+				"actions": [
+					{
+						
+					}
+				],
+				"trigger": {
+					"type": "proximity",
+					"range": 100
+				}
+			}
+		] 
+	},
+]

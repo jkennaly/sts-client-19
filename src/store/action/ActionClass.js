@@ -7,11 +7,11 @@ import _ from 'lodash'
 const uuidv4 = require('uuid/v4')
 import Store from '../Store'
 
-import {Avatar} from '../entity/effect/links/Avatar'
-import {Player} from '../entity/effect/links/Player'
-import {Relocate} from '../entity/effect/relocate/Relocate'
-import {Reposition} from '../entity/effect/reposition/Reposition'
-import {Nothing} from '../entity/effect/nothing/Nothing'
+import {Avatar} from '../effect/links/Avatar'
+import {Player} from '../effect/links/Player'
+import {Relocate} from '../effect/relocate/Relocate'
+import {Reposition} from '../effect/reposition/Reposition'
+import {Nothing} from '../effect/nothing/Nothing'
 
 function ActionClass (id, opts = {}) {
 	Store.call(this, id, opts)
@@ -61,7 +61,7 @@ ActionClass.prototype.actionFactory = function (opts) {
 	const TargetEffect = this.effects[targetEffect]
 	return (engine) => (targetId, targetValue) => {
 		sourceOpts[sourceConnectionName] = targetId
-		targetOpts[targetConnectionName] = this.source.id
+		targetOpts[targetConnectionName] = this.source
 		this.effects = {
 			source: new SourceEffect(undefined, sourceOpts),
 			target: new TargetEffect(undefined, _.assign({}, targetOpts, (targetValue || {})))

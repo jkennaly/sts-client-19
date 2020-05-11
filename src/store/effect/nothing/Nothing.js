@@ -1,5 +1,5 @@
 // Nothing.js
-// store/entity/effect/nothing
+// store/effect/nothing
 
 
 import _ from 'lodash'

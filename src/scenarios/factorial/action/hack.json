@@ -1,0 +1,24 @@
+{
+	"value": "Hack",
+	"type": "ShortText",
+	"tag": "Examine Records",
+	"name": "hack",
+	"scale": 0,
+	"forces": {
+		"electrical": 1
+	},
+	"effective": false,
+	"activation": {
+		"energy": 1
+	},
+	"actionEffects": {
+		"sourceEffect": "Confer",
+		"targetEffect": "Nothing",
+		"sourceConnectionName": "hacker",
+		"targetConnectionName": "hacked",
+		"confers": {
+			"senses": ["matrix", "firewall"]
+		}
+	},
+	"reference": "hack"
+}

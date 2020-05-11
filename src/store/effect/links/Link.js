@@ -1,5 +1,5 @@
 // Link.js
-// store/entity/effect/links
+// store/effect/links
 
 
 import m from 'mithril'

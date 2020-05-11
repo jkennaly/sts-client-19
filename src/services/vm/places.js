@@ -62,6 +62,12 @@ export function getOne({baseId, targetScale, targetId, templates}) {
 	return create(basePlace, targetScale, templates)
 }
 
+export function getAll() {
+	const places = placeRegistry.getItems(x => true)
+	//console.dir('getAll Registry', places)
+	return places
+}
+
 export function createSetpieces({baseId, templates, setpieces}) {
 	const basePlace = placeRegistry.getItem({id: baseId})
 	//if the basePlace is not registered, throw

@@ -1,5 +1,5 @@
 // Reposition.js
-// store/entity/effect/reposition
+// store/effect/reposition
 
 
 import _ from 'lodash'

@@ -5,18 +5,11 @@
 	"name": "human",
 	"scale": 8,
 	"senses": [
-		["electrical", {
-		"value": "Sight",
-		"scale": 6,
-		"places": {},
-		"primary": true
-	}],
-		["mechanical", {
-		"value": "Hearing",
-		"scale": 7,
-		"places": {}
-	}]
+		["electrical", "sight"],
+		["mechanical", "hearing"]
 	],
+	"actions": [],
+	"displayActions": ["collect"],
 	"defaultSense": "Sight",
 	"located": {
 		"factorial-factory": [-732, 0.8, 269]
@@ -37,5 +30,11 @@
 			]
 		}
 	},
-	"profiles": [["divine", {}]]
+	"profiles": [["divine", {}]],
+	"techniques": [
+		["electrical", {
+		"value": "Hacking",
+		"scale": 0
+	}]
+	]
 }

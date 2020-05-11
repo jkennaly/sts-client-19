@@ -1,5 +1,5 @@
 // Relocate.js
-// store/entity/effect/relocate
+// store/effect/relocate
 
 
 import _ from 'lodash'

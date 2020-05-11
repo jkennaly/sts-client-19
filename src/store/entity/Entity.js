@@ -6,6 +6,7 @@ import m from 'mithril'
 import _ from 'lodash'
 import localforage from 'localforage'
 import Store from '../Store'
+import ActionClass from '../action/ActionClass'
 import {Electrical as ElectricalSense} from '../sense/forces/Electrical'
 import {Mechanical as MechanicalSense} from '../sense/forces/Mechanical'
 import {Chemical as ChemicalSense} from '../sense/forces/Chemical'
@@ -32,15 +33,23 @@ const index = type => instance => new type[instance[0]](undefined, instance[1])
 	//created from an existing Object
 	//a new Object will be created using the default player
 
+function ActionMap(data, source) {
+	//console.dir('Entity', data)
+	ActionClass.call(this, undefined, _.assign({source: source.id} ,data))
+
+	this.action = ActionClass.prototype.actionFactory.call(this, data.actionEffects)
+	
+}
+ActionMap.prototype = Object.create(ActionClass.prototype)
+
 
 function Entity (id, opts = {}) {
 	//console.dir('Entity construction begins', id, opts)
-	if(opts.scale && !opts.startPlace) throw 'Cannot create Entity without start place'
+	if(opts.scale && (!opts.startPlace || !opts.startPlace.id)) throw 'Cannot create Entity without start place'
 	//console.dir('Store.call')
 	Store.call(this, id, opts)
 	//console.dir('Store.called')
-	this.actions = []
-	this.displayActions = []
+	this.place = opts.startPlace ? opts.startPlace.id : undefined
 	this.appliedEffects = []
 	Object.defineProperties(this, {
         "effects": {
@@ -54,7 +63,8 @@ function Entity (id, opts = {}) {
 			}
         }
     })
-	this.place = opts.startPlace
+	this.actions = opts.actions ? opts.actions.filter(x => x).map(data => new ActionMap(data, this)) : []
+	this.displayActions = opts.displayActions ? opts.displayActions.filter(x => x).map(data => new ActionMap(data, this)) : []
 	this.energy = {
 		available: 0,
 		channel: amount => {
