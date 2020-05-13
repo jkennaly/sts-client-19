@@ -118,6 +118,18 @@ const sense = forces => {
 
 }
 
+const getById = idsRaw => {
+	if(!idsRaw) return undefined
+	const ids = _.isString(idsRaw) ? [idsRaw] : idsRaw
+	//console.dir('engine.getById', idsRaw, ids, gameState.entities.map(e => e.id))
+	return gameState.entities[_.isString(idsRaw) ? 'find' : 'filter'](e => ids.includes(e.id))
+}
+
+const topChild = (env, child) => {
+	if(child.place === env.id) return child
+	return topChild(env, getById(child.place))
+}
+
 const engine = {
 	queue: queue,
 	start: start,
@@ -131,11 +143,33 @@ const engine = {
 		return !e.effects.some(f => f.newPlace) && (e.place === placeId) || e.effects.length && e.effects.some(f => f.newPlace === placeId)
 	}),
 	//getById works with string or array of stings
-	getById: idsRaw => {
-		if(!idsRaw) return undefined
-		const ids = _.isString(idsRaw) ? [idsRaw] : idsRaw
-		//console.dir('engine.getById', idsRaw, ids, gameState.entities.map(e => e.id))
-		return gameState.entities[_.isString(idsRaw) ? 'find' : 'filter'](e => ids.includes(e.id))
+	getById: getById,
+	posWithin: environmentId => posEntityId => {
+		if(!environmentId || !posEntityId || environmentId === posEntityId) return undefined
+		
+		const env = gameState.entities.find(e => e.id === environmentId)
+		const posE = gameState.entities.find(e => e.id === posEntityId)
+		if(!env || ! posE) return undefined
+		const topChildE = topChild(env, posE)
+		if(!topChildE) return undefined
+		return topChildE.pos
+
+	},
+	distWithinBetween: environmentId => (posEntityId1, posEntityId2) => {
+		if(!environmentId || !posEntityId1 || environmentId === posEntityId1 || environmentId === posEntityId2) return undefined
+		
+		const env = gameState.entities.find(e => e.id === environmentId)
+		const posE1 = gameState.entities.find(e => e.id === posEntityId1)
+		const posE2 = gameState.entities.find(e => e.id === posEntityId2)
+		if(!env || !posE1 || !posE2) return undefined
+		const topChildE1 = topChild(env, posE1)
+		if(!topChildE1) return undefined
+		const topChildE2 = topChild(env, posE2)
+		if(!topChildE2) return undefined
+		const [x1, y1, z1] = topChildE1.pos
+		const [x2, y2, z2] = topChildE2.pos
+		return Math.hypot(x1 - x2, y1 - y2, z1-z2)
+
 	}
 
 }

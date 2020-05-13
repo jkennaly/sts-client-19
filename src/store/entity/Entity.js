@@ -49,7 +49,7 @@ function Entity (id, opts = {}) {
 	//console.dir('Store.call')
 	Store.call(this, id, opts)
 	//console.dir('Store.called')
-	this.place = opts.startPlace ? opts.startPlace.id : undefined
+	this.startPlace = opts.startPlace ? opts.startPlace.id : undefined
 	this.appliedEffects = []
 	Object.defineProperties(this, {
         "effects": {
@@ -60,6 +60,21 @@ function Entity (id, opts = {}) {
 			},
 		    "set": function(newEffects) {
 				this.appliedEffects = newEffects
+			}
+        },
+        "place": {
+            "get": function() {
+				const newPlace = _.get(this.effects.find(e => _.get(e, `newPlace`)), `newPlace`)
+				return newPlace ? newPlace : this.startPlace
+			}
+        },
+        "pos": {
+            "get": function() {
+				if(!this.place) return undefined
+				const scentityInitPos = _.find(_.get(this, `located`, {default: []}), x => true)
+				const scentityRePos = _.get(this.effects.find(e => _.get(e, `newPosition`)), `newPosition`, [])
+				return scentityRePos.length ? scentityRePos : scentityInitPos
+
 			}
         }
     })
@@ -97,6 +112,8 @@ function Entity (id, opts = {}) {
 		.filter(_.isObject)
 	this.tool = false
 }
+
 Entity.prototype = Object.create(Store.prototype)
+
 
 export default Entity;

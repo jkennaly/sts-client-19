@@ -21,7 +21,8 @@ function Reposition (id, opts = {}) {
 	this.tag = 'Reposition Effect'
 	this.name = 'reposition'
 
-	this.newPosition = _.set({}, opts.reference, opts.coords)
+	this.newPosition = _.clone(opts.coords)
+	this.envReference = opts.reference
 	this.display = opts.display
 	this.serial = opts.serial
 

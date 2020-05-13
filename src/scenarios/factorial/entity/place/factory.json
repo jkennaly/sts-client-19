@@ -18,5 +18,11 @@
 			"assetType": "fbx",
 			"assetName": "environment"
 		}
+	},
+	"coords": "rectangular",
+	"postion": {
+		"x": 0,
+		"y": 0,
+		"z": 0
 	}
 }

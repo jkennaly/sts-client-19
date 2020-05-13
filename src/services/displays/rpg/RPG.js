@@ -18,9 +18,6 @@ export default class RPG{
 		this.engine = engine
 		this.place = place
 		this.sensor = sensor
-		
-
-
 
 		this.modes = Object.freeze({
 			NONE:   Symbol("none"),
@@ -149,6 +146,10 @@ export default class RPG{
         }
         btn.innerHTML = '<i class="fas fa-volume-off"></i>';
     }
+
+    get entities(){
+    	return this.engine.at(this.place.id)
+    }
     
 	contextAction(){
 		console.log('contextAction called ' + JSON.stringify(this.onAction));
@@ -204,7 +205,7 @@ export default class RPG{
 						})
 					//get engine update action
 					const collect = this.sensor.displayActions.find(a => a.value === 'Collect').action(engine)
-					this.engine.at(this.place.id)
+					this.entities
 			            .filter(e => e.id !== this.sensor.id)
 			            .filter(o => _.get(o, 'assets.collect.assetName'))
 			            .forEach(c => collect(c.id, {
@@ -310,17 +311,9 @@ export default class RPG{
 			
 		this.container.addEventListener( 'resize', function(){ game.onWindowResize(); }, false );
 
-		//create pc
-		//createCameras
-		//loadEnvironment
-		//loadUSB
-		//load animations
-		//lift curtain on scene
-
-
 		
 		return this.loadEnvironment(loader)(this.place)
-			.then(() => Promise.all(this.engine.at(this.place.id).map(this.loadScentityPromise(loader))))
+			.then(() => Promise.all(this.entities.map(this.loadScentityPromise(loader))))
 			.then(() => {
 				this.createCameras();
 				this.initSfx();
@@ -334,7 +327,7 @@ export default class RPG{
 				}, false);
 			})
 			.then(() => this.animate())
-			.catch(this.onError)
+			.catch(() => this.onError())
 		
 	}
 
@@ -392,10 +385,12 @@ export default class RPG{
 
 			return new Promise((resolve, reject) => {
 				//resolce true if scentity not located in this place
+				/*
 				const scentityInitPos = _.get(scentity, `located.${game.place.reference}`)
-				const scentityRePos = _.get(scentity.effects.find(e => _.get(e, `newPosition.${game.place.reference}`)), `newPosition.${game.place.reference}`, [])
+				const scentityRePos = _.get(scentity.effects.find(e => _.get(e, `newPosition`)), `newPosition`, [])
 				const scentityPos = scentityRePos.length ? scentityRePos : scentityInitPos
-
+				*/
+				const scentityPos = scentity.pos
 				if(!game.place) throw new Error('rpg display place not set at scentity load')
 				if(!scentityPos) throw new Error('scentity not located at display place')
 				if(!scentityPos.length) throw new Error('scentity missing position')
@@ -817,18 +812,18 @@ export default class RPG{
 			});
 		}
         
-        const collectibles = (_.get(this.sensor, 'briefcase.contents.length', 0) >= _.get(this.sensor, 'briefcase.slots', 0) ? [] : this.engine.at(this.place.id))
+        const collectibles = (_.get(this.sensor, 'briefcase.contents.length', 0) >= _.get(this.sensor, 'briefcase.slots', 0) ? [] : this.entities)
             .filter(e => e.id !== this.sensor.id)
             .filter(o => _.get(o, 'assets.collect.assetName'))
         if (collectibles.length && !trigger){
             collectibles
             	.map(scentity => this.scene.children.find(c => scentity.id === _.get(c, 'scentity.id', -1)))
             	.filter(_.isObject)
-	            .forEach(function(object){
-	            	if(!_.get(object, 'scentity.assets.collect.assetName')) game.onError('collected assets not defined')
-					if (object.visible && game.player.object.position.distanceTo(object.position)<100){
+	            .forEach((sceneObject) => {
+	            	if(!_.get(sceneObject, 'scentity.assets.collect.assetName')) game.onError('collected assets not defined')
+					if (sceneObject.visible && this.engine.distWithinBetween(this.place.id)(sceneObject.scentity.id, this.sensor.id)<100){
 						game.actionBtn.style = 'display:block;';
-						game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}${_.get(object, 'scentity.assets.collect.assetName')}.${_.get(object, 'scentity.assets.collect.assetType')}` };
+						game.onAction = { action:'gather-objects', mode:'collect', index:0, src:`${game.assetsPath}${_.get(sceneObject, 'scentity.assets.collect.assetName')}.${_.get(sceneObject, 'scentity.assets.collect.assetType')}` };
 						trigger = true;
 					}
 				});

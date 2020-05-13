@@ -51,7 +51,7 @@ function Human (Entity, startPlace) {
 	const entitySenses = human.senses.map(s => [s[0], _.find(senses, ss => ss.reference === s[1])])
 	const entityActions = human.actions.map(s => _.find(actions, ss => ss.reference === s))
 	const entityDisplayActions = human.displayActions.map(s => _.find(actions, ss => ss.reference === s))
-	console.dir('human', human, actions)
+	//console.dir('human', human, actions)
 	const entityOpts = _.assign({}, human, {
 		startPlace: startPlace, 
 		senses: entitySenses,
@@ -115,7 +115,7 @@ export function scenario (seed) {
 				const firstPlace = createPlaces(starterPlaces)[0]
 				const first = new Human(Entity, firstPlace)
 				const firstStatic = new USB(Entity, firstPlace)
-				console.dir('scenario', first, firstStatic)
+				//console.dir('scenario', first, firstStatic)
 				return [ first, firstStatic ]
 			} catch (err) {
 				console.error(err)

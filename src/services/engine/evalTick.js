@@ -25,7 +25,7 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 
 	newState.game = scenario.registry ? _.find(scenario.registry, so => so.name === 'game') : currentState.game
 	newState.player1 = scenario.registry ? _.find(scenario.registry, so => so.name === 'player') : currentState.player1
-	newState.entities = currentState.entities ? currentState.entities : 
+	newState.entities = currentState.entities ? _.uniqBy(currentState.entities, 'id') : 
 		scenario.registry ? scenario.registry : 
 		[]
 
@@ -36,12 +36,24 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 	}
 	newState.game.currentTick = newState.game.currentTick + 1
 
+	//review currently conferred actions
+		//if the trigger condition or the maintained condition is true, the action stays
+
+	//check for new conferred actions
+	const conferringEntities = newState.entities
+		.filter(e => e.confers && e.confers.length && e.confers.some(c => c.actions && c.actions.length))
+		.sort((a, b) => a.id.localeCompare(b.id))
+
+	_.forEach(conferringEntities, ce => {
+
+	})
+
 
 	//execute each action
 	const sortedActions = actions
 	//filter out actions that are coming in faster than the game engine ticks
 		.filter((a, i, arr) => !a.serial || !arr.some(b => b.serial && b.serial > a.serial && a.value === b.value && a.display === b.display))
-		.sort((a, b) => a.source.localeCompare(b.source))
+		.sort((a, b) => a.id.localeCompare(b.id))
 	
 	_.forEach(sortedActions, a => {
 		//console.dir('evalTick sortedActions', a)
@@ -94,21 +106,22 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 		
 	})
 	/*
-	//universe
-	const universe = new Place()
-	//galaxy
-	const galaxy = new Place(universe)
-	//star
-	const star = new Place(galaxy)
-	//planet
-	const planet = new Place(star)
-	//region
-	const region = new Place(planet)
-	//area
-	const area = new Place(region)
-	//location
-	const location = new Place(area)
-*/
+		//universe
+		const universe = new Place()
+		//galaxy
+		const galaxy = new Place(universe)
+		//star
+		const star = new Place(galaxy)
+		//planet
+		const planet = new Place(star)
+		//region
+		const region = new Place(planet)
+		//area
+		const area = new Place(region)
+		//location
+		const location = new Place(area)
+	*/
+
 
 	//if(actions.length) console.dir('evalTick newState.avatar', newState.avatar)
 	return newState
