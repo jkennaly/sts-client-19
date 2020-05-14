@@ -11,21 +11,23 @@ module.exports = {
 	mode: "production",
 	entry: './src/index.jsx',
 	devtool: "source-map",
+	/*
 	devServer: {
 		contentBase: "./dist"
 	},
-	 optimization: {
-    minimizer: [
-      new TerserPlugin({
-    parallel: true,
-    terserOptions: {
-      ecma: 6,
-    },
-  }),
-      new OptimizeCSSAssetsPlugin({})
-    ]
-  },
-	plugins: [,
+	*/
+	optimization: {
+    	minimizer: [
+	      	new TerserPlugin({
+			    parallel: true,
+			    terserOptions: {
+			      ecma: 6,
+			    },
+	  		}),
+	      	new OptimizeCSSAssetsPlugin({})
+    	]
+  	},
+	plugins: [
 		new CleanWebpackPlugin(["dist"]),
 		new HtmlWebpackPlugin({
 			template: "./index.html",
@@ -34,16 +36,9 @@ module.exports = {
 			favicon: 'src/favicon.ico'
 		}),
 		new MiniCssExtractPlugin({
-      filename: "[name].css",
-      chunkFilename: "[id].css"
-    }),
-		new webpack.ProvidePlugin({
-	        //$: "jquery",
-	        //jQuery: "jquery",
-	        //_: "lodash",
-	        cloudy: "cloudinary-core"
-    	}),
-    	new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+	      filename: "[name].css",
+	      chunkFilename: "[id].css"
+	    }),
 		new CopyWebpackPlugin([{
 			from:'src/scenarios/**/assets/**/*',
 			to:'assets',
@@ -56,42 +51,42 @@ module.exports = {
 	},
 	module: {
 		rules: [
-		      {
-			test: /\.jsx$/,
-			exclude: /(node_modules)/,
-			use: {
-				loader: 'babel-loader',
-		        options: {
+		    {
+				test: /\.jsx$/,
+				exclude: /(node_modules)/,
+				use: {
+					loader: 'babel-loader',
+			        options: {
+				      'plugins': ['lodash'],
+				      'presets': [['@babel/env', { 'targets': { 'node': 6 } }]]
+				    }
+				}
+			}, {
+				test: /\.js$/,
+				exclude: /(node_modules)/,
+				use: {
+					loader: 'babel-loader',
+			        options: {
 			      'plugins': ['lodash'],
 			      'presets': [['@babel/env', { 'targets': { 'node': 6 } }]]
 			    }
+				}
+			}, {
+				test: /\.css$/,
+				use: [MiniCssExtractPlugin.loader,
+	          'css-loader']
+			}, 
+	        {
+	            test: /\.(png|jp(e*)g|svg)$/,  
+				exclude: /(node_modules)/,
+	            use: [{
+	                loader: 'url-loader',
+	                options: { 
+	                    limit: 8000, // Convert images < 8kb to base64 strings
+	                    name: 'img/[name].[ext]'
+	                } 
+	            }]
 			}
-		}, {
-			test: /\.js$/,
-			exclude: /(node_modules)/,
-			use: {
-				loader: 'babel-loader',
-		        options: {
-		      'plugins': ['lodash'],
-		      'presets': [['@babel/env', { 'targets': { 'node': 6 } }]]
-		    }
-			}
-		}, {
-			test: /\.css$/,
-			use: [MiniCssExtractPlugin.loader,
-          'css-loader']
-		}, 
-        {
-            test: /\.(png|jp(e*)g|svg)$/,  
-			exclude: /(node_modules)/,
-            use: [{
-                loader: 'url-loader',
-                options: { 
-                    limit: 8000, // Convert images < 8kb to base64 strings
-                    name: 'img/[name].[ext]'
-                } 
-            }]
-		}
-]
+		]
 	}
 };
