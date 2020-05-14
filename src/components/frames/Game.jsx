@@ -104,7 +104,7 @@ const Game = {
 				}}
 			/> : ''}
 			{game ? <Active 
-				cards={_.get(_.find(player1Cards(), c => c && selfFocusIds.some(f => f === c.id)), 'actions', []).filter(c => !c.display)} 
+				cards={[..._.get(_.find(player1Cards(), c => c && selfFocusIds.some(f => f === c.id)), 'actions', []), ..._.get(_.find(player1Cards(), c => c && selfFocusIds.some(f => f === c.id)), 'conferredActions', [])].filter(c => !c.display)} 
 				focus={actionFocusIds}
 				action={actionCard => {
 					actionFocusIds = _.uniq([...actionFocusIds, actionCard.id])

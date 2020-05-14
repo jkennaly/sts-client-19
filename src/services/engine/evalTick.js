@@ -43,6 +43,31 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 	//review currently conferred actions
 		//if the trigger condition or the maintained condition is true, the action stays
 
+	const deferringEntities = newState.entities
+		.filter(e => e.conferredActions && e.conferredActions.length)
+		.sort((a, b) => a.id.localeCompare(b.id))
+
+	_.forEach(deferringEntities, de => {
+		//console.log('triggers', triggers)
+		const removeIndexes = de.conferredActions.reduce((indexes, da, i) => {
+			const conferer = newState.entities.find(e => e.id === da.conferredBy)
+			if(!conferer) return indexes
+			const conferred = conferer.confers.find(c => c.actionReference === da.name && conferer.id === da.conferredBy)
+			if(!conferred) return indexes
+			const maintained = triggers[conferred.maintained.type](conferer, newState.entities.find(p => p.id === de.place), conferred.maintained[conferred.maintained.type])(de)
+			if(maintained) return indexes
+			const triggered = triggers[conferred.trigger.type](conferer, newState.entities.find(p => p.id === de.place), conferred.trigger[conferred.trigger.type])(de)
+			if(triggered) return indexes
+			return [...indexes, i]
+
+
+		}, []).sort((a, b) => b - a)
+		_.forEach(removeIndexes, i => {
+			de.conferredActions.splice(i, 1)
+		})
+
+	})
+
 	//check for new conferred actions
 	const conferringEntities = newState.entities
 		.filter(e => e.confers && e.confers.length && e.confers.some(c => c.action))
@@ -53,7 +78,12 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 			const possibleConferred = newState.entities.filter(triggers[conferred.to.type](conferred.to[conferred.to.type]))
 			const triggeredConferred = possibleConferred.filter(triggers[conferred.trigger.type](ce, newState.entities.find(p => p.id === ce.place), conferred.trigger[conferred.trigger.type]))
 			const notConferred = triggeredConferred.filter(e => !e.conferredActions.some(ca => ca.conferredBy === ce.id && ca.name === conferred.actionReference))
-			_.forEach(notConferred, c => c.conferredActions.push(conferred.action(c, newState.actions)))
+			_.forEach(notConferred, c => {
+				const a = conferred.action(c, newState.actions)
+				c.conferredActions.push(a)
+				c.memory.push(JSON.stringify(a))
+
+			})
 		})
 	})
 
