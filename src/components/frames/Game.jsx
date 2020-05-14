@@ -65,11 +65,12 @@ const Game = {
 			getPlace: getPlace, 
 			universe: universe
 		})
+		starters.entities = [game, player1, ...starters.entities, ...getPlaces()]
 		selfFocusIds = [player1.id]
 		activeCards = []
 		avatar = undefined
 		activeAction = undefined
-		engine.start([game, player1, ...starters, ...getPlaces()], notify)
+		engine.start(starters, notify)
 	} catch (err) {
 		console.error(err)
 		m.route.set('/launcher')

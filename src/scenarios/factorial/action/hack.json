@@ -12,7 +12,7 @@
 		"energy": 1
 	},
 	"actionEffects": {
-		"sourceEffect": "Confer",
+		"sourceEffect": "Nothing",
 		"targetEffect": "Nothing",
 		"sourceConnectionName": "hacker",
 		"targetConnectionName": "hacked",

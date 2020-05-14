@@ -33,9 +33,9 @@ const index = type => instance => new type[instance[0]](undefined, instance[1])
 	//created from an existing Object
 	//a new Object will be created using the default player
 
-function ActionMap(data, source) {
+function ActionMap(data, source, opts) {
 	//console.dir('Entity', data)
-	ActionClass.call(this, undefined, _.assign({source: source.id} ,data))
+	ActionClass.call(this, undefined, _.assign({}, opts, {source: source.id} ,data))
 
 	this.action = ActionClass.prototype.actionFactory.call(this, data.actionEffects)
 	
@@ -50,6 +50,7 @@ function Entity (id, opts = {}) {
 	Store.call(this, id, opts)
 	//console.dir('Store.called')
 	this.startPlace = opts.startPlace ? opts.startPlace.id : undefined
+	this.startTechniques = _.isArray(opts.techniques) ? opts.techniques : []
 	this.appliedEffects = []
 	Object.defineProperties(this, {
         "effects": {
@@ -60,6 +61,12 @@ function Entity (id, opts = {}) {
 			},
 		    "set": function(newEffects) {
 				this.appliedEffects = newEffects
+			}
+        },
+        "techniques": {
+            "get": function() {
+            	const start = this.startTechniques
+				return [...start]
 			}
         },
         "place": {
@@ -80,6 +87,7 @@ function Entity (id, opts = {}) {
     })
 	this.actions = opts.actions ? opts.actions.filter(x => x).map(data => new ActionMap(data, this)) : []
 	this.displayActions = opts.displayActions ? opts.displayActions.filter(x => x).map(data => new ActionMap(data, this)) : []
+	this.conferredActions = []
 	this.energy = {
 		available: 0,
 		channel: amount => {
@@ -102,6 +110,11 @@ function Entity (id, opts = {}) {
 	this.type = opts.type ? opts.type : 'ShortText'
 	this.tag = opts.tag ? opts.tag : 'Discrete Entity'
 	this.name = opts.name ? opts.name : 'entity'
+	this.confers = (!_.isArray(opts.confers) ? [] : opts.confers)
+		.reduce((conferred, storeData) => {
+			 conferred.push(_.assign({}, storeData, {action: (source, actions) => new ActionMap(actions[storeData.action], source, {conferredBy: this.id})}))
+			 return conferred
+		}, [])
 	this.memory = (!_.isArray(opts.memory) ? [] : opts.memory)
 	this.senses = (!_.isArray(opts.senses) ? [] : opts.senses)
 		.map(index(Sense))
@@ -111,6 +124,7 @@ function Entity (id, opts = {}) {
 		.map(index(Profile))
 		.filter(_.isObject)
 	this.tool = false
+	this.coords = opts.coords ? opts.coords : 'rectangular'
 }
 
 Entity.prototype = Object.create(Store.prototype)

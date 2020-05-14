@@ -2,5 +2,6 @@
 		"value": "Firewall",
 		"scale": 7,
 		"places": {},
-		"reference": "firewall"
+		"reference": "firewall",
+		"name": "firewall"
 	}

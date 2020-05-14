@@ -2,5 +2,6 @@
 	"value": "Hearing",
 	"scale": 7,
 	"places": {},
-	"reference": "hearing"
+	"reference": "hearing",
+	"name": "hearing"
 }

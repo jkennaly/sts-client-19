@@ -30,6 +30,8 @@ let actionQueue
 let senseQueue
 let gameState
 let interval
+let senses
+let actions
 
 const nextTick = notify => {
 	gameState = evalTick(gameState, actionQueue, senseQueue)
@@ -91,11 +93,12 @@ function isCyclic(obj) {
 }
 
 const start = (startObjects, notify, scenario) => {
-	starters = startObjects
+	starters = startObjects.entities
+
 	actionQueue = []
 	senseQueue = []
 	try {
-		gameState = evalTick(undefined, actionQueue, senseQueue, {registry: starters})
+		gameState = evalTick(undefined, actionQueue, senseQueue, {registry: starters, actions: startObjects.actions, senses: startObjects.senses})
 	} catch (err) {
 		throw (err)
 	}

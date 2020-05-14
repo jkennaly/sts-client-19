@@ -10,8 +10,12 @@ const coordsDistance = {
 export function proximity(baseEntity, environment, range) {
 	if(!baseEntity.place || environment.id !== baseEntity.place) return () => false
 	const coordsSystem = environment.coords
+	if(!coordsDistance[coordsSystem]) return () => false
 
-	return testEntity => {
-		return coordsDistance[coordsSystem].apply(null, baseEntity.)
-	}
+	const baseDist = coordsDistance[coordsSystem].apply(null, baseEntity.pos)
+	return testEntity => baseDist.apply(null, testEntity.pos) <= range
+}
+
+export function technique(nique) {
+	return testEntity => testEntity.techniques && testEntity.techniques.length && testEntity.techniques.some(t => t[1].value === nique)
 }

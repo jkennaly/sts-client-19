@@ -3,5 +3,6 @@
 	"scale": 6,
 	"places": {},
 	"primary": true,
-	"reference": "sight"
+	"reference": "sight",
+	"name": "sight"
 }

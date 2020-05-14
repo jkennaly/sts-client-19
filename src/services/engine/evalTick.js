@@ -3,6 +3,8 @@
 
 import _ from 'lodash'
 
+import * as triggers from './evals/trigger.js'
+
 function filterInPlace(a, condition, thisArg) {
   let j = 0;
 
@@ -28,6 +30,8 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 	newState.entities = currentState.entities ? _.uniqBy(currentState.entities, 'id') : 
 		scenario.registry ? scenario.registry : 
 		[]
+	newState.actions = currentState.actions ? currentState.actions : scenario.actions
+	newState.senses = currentState.senses ? currentState.senses : scenario.senses
 
 	if(!newState.game) {
 		console.dir('evalTick currentState', currentState)
@@ -41,11 +45,16 @@ export default function (currentState = {}, actions, senses, scenario = {}) {
 
 	//check for new conferred actions
 	const conferringEntities = newState.entities
-		.filter(e => e.confers && e.confers.length && e.confers.some(c => c.actions && c.actions.length))
+		.filter(e => e.confers && e.confers.length && e.confers.some(c => c.action))
 		.sort((a, b) => a.id.localeCompare(b.id))
 
 	_.forEach(conferringEntities, ce => {
-
+		_.forEach(ce.confers, conferred => {
+			const possibleConferred = newState.entities.filter(triggers[conferred.to.type](conferred.to[conferred.to.type]))
+			const triggeredConferred = possibleConferred.filter(triggers[conferred.trigger.type](ce, newState.entities.find(p => p.id === ce.place), conferred.trigger[conferred.trigger.type]))
+			const notConferred = triggeredConferred.filter(e => !e.conferredActions.some(ca => ca.conferredBy === ce.id && ca.name === conferred.actionReference))
+			_.forEach(notConferred, c => c.conferredActions.push(conferred.action(c, newState.actions)))
+		})
 	})
 
 

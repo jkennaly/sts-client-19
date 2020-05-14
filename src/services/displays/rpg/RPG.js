@@ -313,7 +313,7 @@ export default class RPG{
 
 		
 		return this.loadEnvironment(loader)(this.place)
-			.then(() => Promise.all(this.entities.map(this.loadScentityPromise(loader))))
+			.then(() => Promise.all(this.entities.filter(e => e.pos && e.pos.length && e.assets).map(this.loadScentityPromise(loader))))
 			.then(() => {
 				this.createCameras();
 				this.initSfx();
@@ -344,7 +344,7 @@ export default class RPG{
 			//console.dir('rpg loadStaticScentityPromise', scentity)
 			return new Promise((resolve, reject) => {
 				//resolce true if scentity not located in this place
-				const scentityPos = _.get(scentity, `located.${game.place.reference}`)
+				const scentityPos = scentity.pos
 
 				if(!game.place) throw new Error('rpg display place not set at scentity load')
 				if(!scentityPos) throw new Error('scentity not located at display place')

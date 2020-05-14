@@ -22,6 +22,7 @@ function ActionClass (id, opts = {}) {
 	this.activation = {
 		energy: 0
 	}
+	this.conferredBy = opts.conferredBy
 }
 ActionClass.prototype = Object.create(Store.prototype)
 

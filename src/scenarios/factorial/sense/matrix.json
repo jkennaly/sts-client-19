@@ -3,5 +3,6 @@
 		"scale": 0,
 		"places": {},
 		"primary": true,
-		"reference": "matrix"
+		"reference": "matrix",
+		"name": "matrix"
 	}

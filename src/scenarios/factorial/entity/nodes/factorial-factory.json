@@ -1,4 +1,4 @@
-[
+
 	{
 		"value": "Console 1",
 		"type": "ShortText",
@@ -22,16 +22,6 @@
 			["electrical", {}], 
 			["mechanical", {}]
 		],
-		"assets": {
-			"addition": {
-				"assetType": "fbx",
-				"assetName": "usb"
-			},
-			"collect": {
-				"assetType": "jpg",
-				"assetName": "usb"
-			}
-		},
 		"records": {
 			"blockers": [],
 			"concepts": [],
@@ -40,16 +30,20 @@
 		},
 		"confers": [
 			{
-				"actions": [
-					{
-						
-					}
-				],
+				"action": "hack",
+				"actionReference": "hack",
 				"trigger": {
 					"type": "proximity",
-					"range": 100
+					"proximity": 100
+				},
+				"maintained": {
+					"type": "proximity",
+					"proximity": 100
+				},
+				"to": {
+					"type": "technique",
+					"technique": "Hacking"
 				}
 			}
 		] 
-	},
-]
+	}
