@@ -483,7 +483,7 @@ export default class RPG{
 			return new Promise((resolve, reject) => {
 				if(_.get(scentity, 'assets.addition.assetType') !== 'fbx') throw new Error('invalid scentity assetType')
 
-				loader.load( `${this.assetsPath}${_.get(scentity, 'assets.addition.assetName')}.${_.get(scentity, 'assets.addition.assetType')}`, function ( object ) {
+				loader.load( `${game.assetsPath}${_.get(scentity, 'assets.addition.assetName')}.${_.get(scentity, 'assets.addition.assetType')}`, function ( object ) {
 
 
 				game.scene.add(object);
