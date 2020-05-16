@@ -11,16 +11,12 @@ module.exports = {
 	mode: "development",
 	entry: './src/index.jsx',
 	devtool: "inline-source-map",
-	devServer: {
-		contentBase: "./dist"
-	},
 	plugins: [
 		new CleanWebpackPlugin(["dist"]),
 		new HtmlWebpackPlugin({
 			template: "./index.html",
 			filename: "index.html",
-			inject: "body",
-			favicon: 'src/favicon.ico'
+			inject: "body"
 		}),
 		new CopyWebpackPlugin([{
 			from:'src/scenarios/**/assets/**/*',
@@ -61,12 +57,23 @@ module.exports = {
 		}, 
         {
             test: /\.(png|jp(e*)g|svg)$/,  
-			exclude: /(node_modules)/,
+			exclude: [/(node_modules)\//, /fav\//],
             use: [{
                 loader: 'url-loader',
                 options: { 
                     limit: 8000, // Convert images < 8kb to base64 strings
                     name: 'img/[name].[ext]'
+                } 
+            }]
+		}, 
+        {
+            test: /fav\/(.*)\.(png|ico|xml)$/,  
+			exclude: /(node_modules)\//,
+            use: [{
+                loader: 'url-loader',
+                options: { 
+                    limit: 16000, // Convert images < 8kb to base64 strings
+                    name: 'fav/[name].[ext]'
                 } 
             }]
 		}

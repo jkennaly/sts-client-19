@@ -52,6 +52,7 @@
         "onchange": "^5.2.0",
         "webpack": "^4.33.0",
         "webpack-cli": "^3.3.11",
+    "workbox-cli": "^5.1.3",
         "workbox": "0.0.0"
     },
     "scripts": {
@@ -60,10 +61,13 @@
         "set-dev": "cp webpack.config.dev.js webpack.config.js",
         "set-prod": "cp webpack.config.prod.js webpack.config.js",
         "mk-img": "mkdir dist/img",
+        "mk-fav": "mkdir dist/fav",
         "cp-man": "cp src/manifest.webmanifest dist/",
-        "cp-img": "cp src/img/* dist/img/",
+        "cp-img": "npm run mk-img && cp src/img/* dist/img/",
+        "cp-fav": "npm run mk-fav && cp fav/* dist/fav/",
+        "cp-all": "npm run cp-man && npm run cp-img && npm run cp-fav",
         "worker": "workbox injectManifest workbox-config.js",
         "build": "webpack --config webpack.config.js",
-        "postbuild": "npm run worker && npm run cp-man && npm run mk-img && npm run cp-img"
+        "postbuild": "npm run worker && npm run cp-all"
     }
 }

@@ -16,6 +16,7 @@ const Launcher = {
 		view: () => <div class="main-stage">
 			<Button buttonName={`New Game`} action={newGame} />
 			<Button buttonName={`Settings`} action={settings} />
+			<Button buttonName={`Quantize Site`} />
 
 		</div>
 }

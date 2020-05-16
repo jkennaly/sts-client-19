@@ -43,7 +43,7 @@ th {border-left: 1px solid white;border-right: 1px solid white;padding: 0 0.25em
 .sts-subject-square {display: flex;flex-direction: column;justify-content: flex-start;min-height: 1.5em;overflow: hidden;position: relative;}
 .sts-vertical-fields {display: flex;flex-direction: column;justify-content: left;}
 .sts-setting {display: flex;flex-direction: row;justify-content: center;}
-.ui-button {align-self: center;background: radial-gradient(#EE5F28, black);color: cyan;display: flex;justify-content: center;left: 0;margin: 1em 0;padding: 1em;right: 0;width: 50%;}
+.ui-button {align-self: center;background: radial-gradient(#ff2828, black);color: cyan;display: flex;justify-content: center;left: 0;margin: 1em 0;padding: 1em;right: 0;width: 50%;}
 
 #message{
 				position:absolute;

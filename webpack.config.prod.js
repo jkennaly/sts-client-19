@@ -32,8 +32,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: "./index.html",
 			filename: "index.html",
-			inject: "body",
-			favicon: 'src/favicon.ico'
+			inject: "body"
 		}),
 		new MiniCssExtractPlugin({
 	      filename: "[name].css",
@@ -76,17 +75,28 @@ module.exports = {
 				use: [MiniCssExtractPlugin.loader,
 	          'css-loader']
 			}, 
-	        {
-	            test: /\.(png|jp(e*)g|svg)$/,  
-				exclude: /(node_modules)/,
-	            use: [{
-	                loader: 'url-loader',
-	                options: { 
-	                    limit: 8000, // Convert images < 8kb to base64 strings
-	                    name: 'img/[name].[ext]'
-	                } 
-	            }]
-			}
+        {
+            test: /\.(png|jp(e*)g|svg)$/,  
+			exclude: [/(node_modules)\//, /fav\//],
+            use: [{
+                loader: 'url-loader',
+                options: { 
+                    limit: 8000, // Convert images < 8kb to base64 strings
+                    name: 'img/[name].[ext]'
+                } 
+            }]
+		}, 
+        {
+            test: /^fav\/(.*)\.(png|ico|xml)$/,  
+			exclude: /(node_modules)\//,
+            use: [{
+                loader: 'url-loader',
+                options: { 
+                    limit: 16000, // Convert images < 8kb to base64 strings
+                    name: 'fav/[name].[ext]'
+                } 
+            }]
+		}
 		]
 	}
 };
