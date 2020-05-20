@@ -5,6 +5,7 @@ import m from 'mithril';
 import Launcher from '../launcher/Launcher.jsx'
 import Settings from '../launcher/settings/Settings.jsx'
 import Game from '../frames/Game.jsx'
+import Demo from '../elements/Demo.jsx'
 
 
 const WelcomeView = () => [
@@ -28,7 +29,7 @@ const App = {
 			<div id="main-stage">
 				{children}
 			</div>
-			<div id="DisplayBar" />
+			{global.nw ? '' : <Demo />}
 		</div>
 };
 
