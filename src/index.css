@@ -33,7 +33,7 @@ th {border-left: 1px solid white;border-right: 1px solid white;padding: 0 0.25em
 .sts-card-focus {border: 4px solid blue;background: white;}
 .sts-card-focus-invalid {background: gray;}
 .sts-card-focus-targetable {border: 4px dashed green;background: white;}
-.sts-demo {display:flex;flex-direction: column;position: fixed;right: 0;top: 0;}
+.sts-demo {display:flex;flex-direction: column;position: absolute;right: 0;top: 0;z-index: 10}
 .sts-fields {display: flex;flex-direction: row;justify-content: space-between;min-height: 1.5em;}
 .sts-fields-minor {display: flex;flex-direction: row;font-size: 85%;justify-content: space-between;margin: 0.5em 0 0;min-height: 1.27em;text-transform: uppercase;}
 .sts-horizontal-fields {display: flex;flex-direction: row;justify-content: left;}
@@ -52,9 +52,7 @@ th {border-left: 1px solid white;border-right: 1px solid white;padding: 0 0.25em
     text-align: center;
 }
 .sts-element .sts-widget-container {
-    transition: background .3s,border .3s,-webkit-border-radius .3s,-webkit-box-shadow .3s;
     transition: background .3s,border .3s,border-radius .3s,box-shadow .3s;
-    transition: background .3s,border .3s,border-radius .3s,box-shadow .3s,-webkit-border-radius .3s,-webkit-box-shadow .3s;
 }
 .sts-button {
     font-size: 18px;
@@ -64,6 +62,7 @@ th {border-left: 1px solid white;border-right: 1px solid white;padding: 0 0.25em
     padding: 20px 40px;
     border-radius: 5px;
     width: auto;
+    max-width: 25%;
 }
 
 .sts-button:hover {

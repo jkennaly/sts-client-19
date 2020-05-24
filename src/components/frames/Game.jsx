@@ -4,6 +4,7 @@
 
 import m from 'mithril'
 import _ from 'lodash'
+import Demo from '../elements/Demo.jsx'
 import Button from  '../elements/Button.jsx'
 
 import Active from './active/Active.jsx'
@@ -86,6 +87,9 @@ const Game = {
 			//player1Cards = {game:game, player:player1}
 		},
 		view: () => <div class="sts-frame-game">
+		{console.dir('Game', m.route.get(), window.innerWidth)}
+			{window && window.innerWidth <= 480 || global.nw || /\/(launcher|settings)$/.test(m.route.get()) ? '' : <Demo />}
+		
 			{
 				//console.dir('Game.jsx', player1Cards(), game)
 			}
