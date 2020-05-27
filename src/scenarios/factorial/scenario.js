@@ -86,7 +86,8 @@ export function scenario (seed) {
 				return {
 					entities: _.map(entities, e => new Scentity(Entity, e, firstPlace)),
 					senses: senses,
-					actions: actions	
+					actions: actions,
+					
 				} 
 				//const first = new Scentity(Entity, firstPlace)
 				//const firstStatic = new USB(Entity, firstPlace)

@@ -25,7 +25,7 @@ const Self = (vnode) => {
 	let currentCardClick = clicked(_.filter(vnode.attrs.cards, c => c), vnode.attrs.focus, vnode.attrs.action, vnode.attrs.endAction)
 	return {
 		onupdate: ({attrs}) => currentCardClick = clicked(_.filter(attrs.cards, c => c), attrs.focus, attrs.action, attrs.endAction),
-		view: ({attrs}) => <div class="sts-frame-self">
+		view: ({attrs}) => <div class={`sts-select-bar ${attrs.hidden ? 'hidden' : ''}`}>
 			<h1>Self</h1>
 			{
 				//console.dir('Self selfCards', attrs.cards)

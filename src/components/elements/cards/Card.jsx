@@ -17,7 +17,7 @@ const Card = {
     } 
     key={attrs.card.key} 
     onclick={attrs.clickFunction && attrs.valid !== false ? (e => {
-      //console.dir('Card click', attrs.card)
+      //console.dir('Card click', !_.get(attrs, 'card.subject.effective', true), attrs.card)
       if(!_.get(attrs, 'card.subject.effective', true)) return attrs.card.subject.action()
      return attrs.clickFunction(attrs.card.subject.id)
 

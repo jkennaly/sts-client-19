@@ -22,7 +22,7 @@ const Active = (vnode) => {
 	let currentCardClick = clicked(vnode.attrs.cards, vnode.attrs.focus, vnode.attrs.action)
 	return {
 		onupdate: ({attrs}) => currentCardClick = clicked(attrs.cards, attrs.focus, attrs.action, attrs.endAction),
-	view: ({attrs}) => <div class="sts-frame-active">
+	view: ({attrs}) => <div class={`sts-select-bar ${attrs.hidden ? 'hidden' : ''}`}>
 		<h1>Action</h1>
 		{
 			attrs.cards.map(c => <Card 

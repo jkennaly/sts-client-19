@@ -1,5 +1,5 @@
 {
-	"value": "Human 1",
+	"value": "Factoria",
 	"type": "ShortText",
 	"tag": "Human Discrete Entity",
 	"name": "human",
@@ -10,7 +10,7 @@
 	],
 	"actions": [],
 	"displayActions": ["collect"],
-	"defaultSense": "Sight",
+	"defaultSenses": ["Sight", "Hearing"],
 	"located": {
 		"factorial-factory": [-732, 0.8, 269]
 	},
@@ -33,8 +33,8 @@
 	"profiles": [["divine", {}]],
 	"techniques": [
 		["electrical", {
-		"value": "Hacking",
-		"scale": 0
-	}]
+			"value": "Hacking",
+			"scale": 0
+		}]
 	]
 }
